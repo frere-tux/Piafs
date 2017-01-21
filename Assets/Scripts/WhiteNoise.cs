@@ -16,5 +16,11 @@ namespace Piafs
             double randValue = randomizer.NextDouble();
             return ((float)randValue*2.0f - 1.0f) * amp;
         }
+
+        public override float GetPositiveValue()
+        {
+            double randValue = randomizer.NextDouble();
+            return (float)randValue * amp;
+        }
     }
 }

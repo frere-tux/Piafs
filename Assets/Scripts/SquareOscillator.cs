@@ -11,7 +11,7 @@ namespace Piafs
     {
         protected override float ComputeSample()
         {
-            return (GetModulatedPhase() >= 0.5f ? 1.0f : -1.0f) * amp;
+            return (GetModulatedPhase() >= 0.5f ? 1.0f : -1.0f);
         }
     }
 }

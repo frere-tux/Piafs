@@ -10,7 +10,7 @@ namespace Piafs
     {
         protected override float ComputeSample()
         {
-            return Mathf.Sin(GetModulatedPhase() * 2.0f * 3.1415926f) * amp;
+            return Mathf.Sin(GetModulatedPhase() * 2.0f * 3.1415926f);
         }
     }
 }

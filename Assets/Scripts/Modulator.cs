@@ -9,5 +9,6 @@ namespace Piafs
     public abstract class Modulator : MonoBehaviour
     {
         public abstract float GetValue();
+        public abstract float GetPositiveValue();
     }
 }

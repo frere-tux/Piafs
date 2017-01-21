@@ -14,6 +14,7 @@ namespace Piafs
 
         public List<Modulator> freqModulators;
         public List<Modulator> phaseModulators;
+        public List<Modulator> ampModulators;
 
         protected float phase = 0.0f;
 		protected float sampleTime = 0.0f;
@@ -40,7 +41,7 @@ namespace Piafs
 			phase += f;
 			phase -= Mathf.Floor(phase);
 
-			return ComputeSample();
+            return ComputeSample() * GetModulatedAmp();
 		}
 
         protected float GetModulatedFreq()
@@ -67,11 +68,28 @@ namespace Piafs
             return modulatedPhase;
 		}
 
+        protected float GetModulatedAmp()
+        {
+            float modulatedAmp = amp;
+
+            foreach (Modulator ampModulator in ampModulators)
+            {
+                modulatedAmp += ampModulator.GetPositiveValue();
+            }
+
+            return modulatedAmp;
+        }
+
         protected abstract float ComputeSample();
 
         public override float GetValue()
         {
             return GetNextSample();
+        }
+
+        public override float GetPositiveValue()
+        {
+            return (GetNextSample() + amp) * 0.5f;
         }
     }
 }
