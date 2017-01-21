@@ -7,11 +7,11 @@ using System.Text;
 namespace Piafs
 {
     [System.Serializable]
-    public class CurveOscillatorSinOscillator : Oscillator
+    public class SquareOscillator : Oscillator
     {
         protected override float ComputeSample()
         {
-            return Mathf.Sin(ModulatedPhase * 2.0f * 3.1415926f) * amp;
+            return (GetModulatedPhase() >= 0.5f ? 1.0f : -1.0f) * amp;
         }
     }
 }
