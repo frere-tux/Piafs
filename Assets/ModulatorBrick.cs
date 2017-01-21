@@ -6,8 +6,6 @@ namespace Piafs
 {
     public class ModulatorBrick : MonoBehaviour
     {
-        private float dragTime = 0.1f;
-        private bool clicked = false;
         public ModulatorSlot slot;
         public Oscillator oscillator;
         Collider2D col;
