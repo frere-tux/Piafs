@@ -13,7 +13,7 @@ namespace Piafs
 
         protected override float ComputeSample()
         {
-            return curve.Evaluate(phase) * amp;
+            return curve.Evaluate(ModulatedPhase) * amp;
         }
     }
 }
