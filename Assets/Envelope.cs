@@ -13,7 +13,9 @@ namespace Piafs
         public float decayDuration;
         public AnimationCurve release;
         public float releaseDuration;
+        public float amp;
         public bool loop;
+        public bool debugEnvelope;
 
         private int sampleTime;
         private int sampleRate;
@@ -27,22 +29,39 @@ namespace Piafs
             sampleRate = AudioSettings.outputSampleRate;
         }
 
+        void Update()
+        {
+
+            if(debugEnvelope)
+            {
+                if(Input.GetKeyDown(KeyCode.Space))
+                {
+                    Trigger();
+                }
+                if (Input.GetKeyUp(KeyCode.Space))
+                {
+                    Untrigger();
+                }
+            }
+        }
+
         public void Trigger()
         {
             sampleTime = 0;
-            attackAmplitude = currentValue;
+            attackAmplitude = currentValue * releaseAmplitude;
             triggered = true;
         }
 
         public void Untrigger()
         {
             triggered = false;
-            releaseAmplitude = currentValue;
+            releaseAmplitude = Mathf.Lerp(attackAmplitude, 1f, currentValue);
             sampleTime = 0;
         }
 
         public override float GetValue()
         {
+            
             sampleTime++;
             if (triggered)
             {
@@ -53,12 +72,12 @@ namespace Piafs
                 if (sampleTime < attackDuration * sampleRate)
                 {
                     currentValue = attack.Evaluate((sampleTime / (float)sampleRate) / attackDuration);
-                    return currentValue;
+                    return Mathf.Lerp(attackAmplitude,1f, currentValue) * amp;
                 }
                 else
                 {
                     currentValue = decay.Evaluate((sampleTime / (float)sampleRate - attackDuration) / decayDuration);
-                    return currentValue;
+                    return Mathf.Lerp(attackAmplitude, 1f, currentValue) * amp;
                 }
             }
             else
@@ -66,12 +85,12 @@ namespace Piafs
                 if (sampleTime < (releaseDuration) * sampleRate)
                 {
                     currentValue = release.Evaluate((sampleTime / (float)sampleRate) / releaseDuration);
-                    return currentValue * releaseAmplitude;
+                    return currentValue * releaseAmplitude * amp;
                 }
                 else
                 {
                     currentValue = 0f;
-                    return currentValue;
+                    return currentValue * amp;
                 }
             }
         }
