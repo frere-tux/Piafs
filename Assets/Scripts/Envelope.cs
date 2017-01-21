@@ -14,7 +14,6 @@ namespace Piafs
         public float decayDuration;
         public AnimationCurve release;
         public float releaseDuration;
-        public float amp;
         public bool loop;
         public bool debugEnvelope;
 
@@ -73,12 +72,12 @@ namespace Piafs
                 if (sampleTime < attackDuration * sampleRate)
                 {
                     currentValue = attack.Evaluate((sampleTime / (float)sampleRate) / attackDuration);
-                    return Mathf.Lerp(attackAmplitude,1f, currentValue) * amp;
+                    return Mathf.Lerp(attackAmplitude,1f, currentValue) * GetModulatedAmp();
                 }
                 else
                 {
                     currentValue = decay.Evaluate((sampleTime / (float)sampleRate - attackDuration) / decayDuration);
-                    return Mathf.Lerp(attackAmplitude, 1f, currentValue) * amp;
+                    return Mathf.Lerp(attackAmplitude, 1f, currentValue) * GetModulatedAmp();
                 }
             }
             else
@@ -86,12 +85,12 @@ namespace Piafs
                 if (sampleTime < (releaseDuration) * sampleRate)
                 {
                     currentValue = release.Evaluate((sampleTime / (float)sampleRate) / releaseDuration);
-                    return currentValue * releaseAmplitude * amp;
+                    return currentValue * releaseAmplitude * GetModulatedAmp();
                 }
                 else
                 {
                     currentValue = 0f;
-                    return currentValue * amp;
+                    return currentValue * GetModulatedAmp();
                 }
             }
         }
