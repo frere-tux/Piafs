@@ -9,33 +9,30 @@ namespace Piafs
     [System.Serializable]
     public abstract class Oscillator
     {
+        public bool mute = false;
         public float freq = 440.0f;
         public float amp = 1.0f;
         public float smoothingSpeed = 0.003f;
+        public float freqModulation = 0.0f;
 
         protected float phase = 0.0f;
         protected float sampleTime = 0.0f;
         protected float smoothFreq;
 
-        // Use this for initialization
-        public Oscillator()
-        {
-            smoothFreq = freq;
-        }
-
         public void Init()
         {
+            smoothFreq = freq;
             sampleTime = 1.0f / AudioSettings.outputSampleRate;
         }
 
         public float GetNextSample()
         {
-            if (sampleTime == 0.0f)
+            if (mute || sampleTime == 0.0f)
             {
                 return 0.0f;
             }
 
-            smoothFreq = Mathf.Lerp(smoothFreq, freq, smoothingSpeed);
+            smoothFreq = Mathf.Lerp(smoothFreq, freq + freqModulation, smoothingSpeed);
 
             float f = smoothFreq * sampleTime;
             phase += f;

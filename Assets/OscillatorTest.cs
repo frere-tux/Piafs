@@ -6,30 +6,30 @@ namespace Piafs
     [RequireComponent(typeof(AudioSource))]
     public class OscillatorTest : MonoBehaviour
     {
-        public SinOscillator sinOsc = new SinOscillator();
-        public SquareOscilator squareOsc = new SquareOscilator();
+        public CurveOscillator curveOsc = new CurveOscillator();
+        public CurveOscillator freqModulatorOsc1 = new CurveOscillator();
+        public CurveOscillator freqModulatorOsc2 = new CurveOscillator();
 
         void Start()
         {
-            sinOsc.Init();
-            squareOsc.Init();
+            curveOsc.Init();
+            freqModulatorOsc1.Init();
+            freqModulatorOsc2.Init();
         }
 
 
         void OnAudioFilterRead(float[] data, int channels)
         {
-
             for (int n = 0; n < data.Length; n += channels)
             {
-                float s1 = sinOsc.GetNextSample();
-                float s2 = squareOsc.GetNextSample();
+                freqModulatorOsc1.freqModulation = freqModulatorOsc2.GetNextSample();
+                curveOsc.freqModulation = freqModulatorOsc1.GetNextSample();
+
+                float s = Mathf.Clamp(curveOsc.GetNextSample(), -1.0f, 1.0f);
 
                 for (int i = 0; i < channels; i++)
                 {
-                    if (i % channels == 0)
-                        data[n + i] = s1;
-                    else
-                        data[n + i] = s2;
+                    data[n + i] = s;
                 }
             }
         }
