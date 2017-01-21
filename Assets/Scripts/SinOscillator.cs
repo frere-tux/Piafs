@@ -6,14 +6,11 @@ using System.Text;
 
 namespace Piafs
 {
-    [System.Serializable]
-    public class CurveOscillator : Oscillator
+    public class SinOscillator : Oscillator
     {
-        public AnimationCurve curve;
-
         protected override float ComputeSample()
         {
-            return curve.Evaluate(ModulatedPhase) * amp;
+            return Mathf.Sin(GetModulatedPhase() * 2.0f * 3.1415926f) * amp;
         }
     }
 }

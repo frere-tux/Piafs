@@ -7,11 +7,13 @@ using System.Text;
 namespace Piafs
 {
     [System.Serializable]
-    public class SquareOscillator : Oscillator
+    public class CurveOscillator : Oscillator
     {
+        public AnimationCurve curve;
+
         protected override float ComputeSample()
         {
-            return (ModulatedPhase >= 0.5f ? 1.0f : -1.0f) * amp;
+            return curve.Evaluate(GetModulatedPhase()) * amp;
         }
     }
 }
