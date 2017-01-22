@@ -36,6 +36,14 @@ namespace Piafs
             public Trigger pattern;
         }
 
+        void Start()
+        {
+            if(debugLevel)
+            {
+                Init(birdAnim, birdMixer, playerMixer);
+            }
+        }
+
         public void Init(AnimBird _birdAnim, Mixer _birdMixer, Mixer _playerMixer)
         {
             birdAnim = _birdAnim;

@@ -29,15 +29,15 @@ namespace Piafs
         {
             col = GetComponent<Collider2D>();
             movingPartOrigin = movingPart.transform.position;
-            fullDragDistance = 0.5f * Camera.main.WorldToScreenPoint(Vector3.up * fullDragWorldDistance).y;
-            fixedModulator.SetSmoothing(sliderSmoothing,(max-min)* sliderSmoothThreshold);
+            fullDragDistance = Camera.main.WorldToScreenPoint(Vector3.up * fullDragWorldDistance).y * 0.22f;
+            if(fixedModulator != null)fixedModulator.SetSmoothing(sliderSmoothing,(max-min)* sliderSmoothThreshold);
             Refresh();
         }
 
         void Update()
         {
-            sliderValue = steppedValue / (max- min);
-            //if (Mathf.Abs(sliderValue - steppedValue) > 0.05f) sliderValue = steppedValue + 0.05f * Mathf.Sign(sliderValue - steppedValue);
+            sliderValue = Toolkit.Damp(sliderValue,steppedValue / (max- min),1f,Time.deltaTime);
+            //if (Mathf.Abs(sliderValue - steppedValue / (max - min)) > 0.05f) sliderValue = steppedValue / (max - min) + 0.05f * Mathf.Sign(sliderValue - steppedValue);
             smoothedValue = Toolkit.Damp(smoothedValue, sliderValue, 0.99999f,Time.deltaTime);
             if (Mathf.Abs(smoothedValue - sliderValue) < sliderSmoothThreshold) smoothedValue = sliderValue;
             RefreshFixedModulator();
@@ -49,6 +49,7 @@ namespace Piafs
             //Debug.Log("mousedown");
             Vector2 startDragPos = Input.mousePosition;
             yDragStart = (startDragPos.y - fullDragDistance * sliderValue);
+            
         }
 
         public void OnMouseDrag()
@@ -76,7 +77,7 @@ namespace Piafs
 
         public void RefreshFixedModulator()
         {
-            fixedModulator.SetValueSmooth(Mathf.Lerp(min, max, smoothedValue));
+            if(fixedModulator != null)fixedModulator.SetValueSmooth(Mathf.Lerp(min, max, smoothedValue));
         }
 
         public void SolveValue()

@@ -8,11 +8,19 @@ namespace Piafs
     {
         public Envelope envelope;
         public float minTriggerTime;
+        public Sprite[] sprites;
+
         private float triggerTime;
         private float triggerDuration;
         public System.Action<Trigger,bool> onEndTrigger;
         public System.Action onStartTrigger;
         private bool triggered;
+        private SpriteRenderer spriteRenderer;
+
+        void Awake()
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
 
         void OnMouseDown()
         {
@@ -20,6 +28,8 @@ namespace Piafs
             envelope.Trigger();
             triggerTime = Time.time;
             if (onStartTrigger != null) onStartTrigger();
+            spriteRenderer.sprite = sprites[1];
+            
         }
 
         void Update()
@@ -30,6 +40,7 @@ namespace Piafs
                 envelope.Untrigger();
                 triggerTime = Time.time - triggerDuration;
                 if (onEndTrigger != null) onEndTrigger(this, triggerTime > minTriggerTime);
+                spriteRenderer.sprite = sprites[0];
             }
         }
     }
