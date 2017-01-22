@@ -8,6 +8,8 @@ namespace Piafs
     public class LevelDescriptor : MonoBehaviour
     {
         public Mixer birdMixer;
+        [SerializeField]
+        private AnimBird birdAnim;
         public float songIntervalMin, songIntervalMax;
         public bool debugLevel;
         [SerializeField]
@@ -160,6 +162,7 @@ namespace Piafs
             if(outputFlag != null)
             {
                 birdMixer.modulators.Add(outputFlag.gameObject.GetComponent<Modulator>());
+                birdAnim.modulator = outputFlag.gameObject.GetComponent<Modulator>();
             }
             else
             {
