@@ -6,9 +6,31 @@ namespace Piafs
 {
     public class FilterModulator :  Modulator
     {
+        public float cutoff;
+        private List<float> buffer;
+        public bool bypass;
+        public int smoothLength;
+
+        void Start()
+        {
+            buffer = new List<float>(1024);
+            for (int i = 0; i < buffer.Capacity; i++) buffer.Add(0f);
+        }
+
         public override float GetValue()
         {
-            return 0f;
+            float input = GetModulatedFreq();
+            if (bypass) return input;
+            float smoothedInput = 0f;
+            
+            for(int i = 0; i < smoothLength; i++)
+            {
+                smoothedInput += buffer[smoothLength - 1 - i];
+            }
+            smoothedInput /= (float)smoothLength;
+            buffer.RemoveAt(0);
+            buffer.Add(input);
+            return smoothedInput;
         }
 
         public override float GetPositiveValue()
