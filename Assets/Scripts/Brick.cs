@@ -32,6 +32,16 @@ namespace Piafs
             slot.GrabOscillator();
         }
 
+        public void OnMouseEnter()
+        {
+            InputManager.hoveredSlot = slot;
+        }
+
+        public void OnMouseExit()
+        {
+            InputManager.hoveredSlot = null;
+        }
+
         public void Drop(Slot _slot)
         {
             slot = _slot;
