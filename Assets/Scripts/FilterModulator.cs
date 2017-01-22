@@ -9,6 +9,7 @@ namespace Piafs
         public float cutoff;
         private List<float> buffer;
         public bool bypass;
+        [Range(1, 1023)]
         public int smoothLength;
 
         void Start()

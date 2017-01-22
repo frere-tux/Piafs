@@ -19,7 +19,12 @@ namespace Piafs
         public abstract float GetValue();
         public abstract float GetPositiveValue();
 
-        protected float GetModulatedFreq()
+        public virtual float GetLastPositiveValue()
+        {
+            return GetPositiveValue();
+        }
+
+        public float GetModulatedFreq()
         {
             float modulatedFreq = freq;
 
@@ -31,7 +36,7 @@ namespace Piafs
             return modulatedFreq;
         }
 
-        protected float GetModulatedPhase()
+        public float GetModulatedPhase()
         {
             float modulatedPhase = phase;
 
@@ -43,14 +48,26 @@ namespace Piafs
             return modulatedPhase;
         }
 
-        protected float GetModulatedAmp()
+        public float GetModulatedAmp(bool lastValue = false)
         {
             float modulatedAmp = amp;
 
-            foreach (Modulator ampModulator in ampModulators)
+            if (lastValue)
             {
-                modulatedAmp += ampModulator.GetPositiveValue();
+                foreach (Modulator ampModulator in ampModulators)
+                {
+                    modulatedAmp += ampModulator.GetPositiveValue();
+                }
             }
+            else
+            {
+                foreach (Modulator ampModulator in ampModulators)
+                {
+                    modulatedAmp += ampModulator.GetPositiveValue();
+                }
+            }
+
+            
 
             return modulatedAmp;
         }

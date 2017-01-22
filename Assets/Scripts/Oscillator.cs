@@ -14,6 +14,7 @@ namespace Piafs
 		protected float smoothFreq;
 
         private float smoothingSpeed = 1.0f;
+        private float value = 0.0f;
 
         public void Start()
         {
@@ -34,8 +35,10 @@ namespace Piafs
 			phase += f;
 			phase -= Mathf.Floor(phase);
 
-            return ComputeSample() * GetModulatedAmp();
-		}
+            value = ComputeSample() * GetModulatedAmp();
+
+            return value;
+        }
 
         protected abstract float ComputeSample();
 
@@ -47,6 +50,11 @@ namespace Piafs
         public override float GetPositiveValue()
         {
             return (GetNextSample() + amp) * 0.5f;
+        }
+
+        public override float GetLastPositiveValue()
+        {
+            return (value + amp) *0.5f;
         }
     }
 }
