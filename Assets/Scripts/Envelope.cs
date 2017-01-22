@@ -50,7 +50,6 @@ namespace Piafs
             sampleTime = 0;
             attackAmplitude = currentValue * releaseAmplitude;
             triggered = true;
-            Debug.Log("trigger");
         }
 
         public void Untrigger()
@@ -58,7 +57,6 @@ namespace Piafs
             triggered = false;
             releaseAmplitude = Mathf.Lerp(attackAmplitude, 1f, currentValue);
             sampleTime = 0;
-            Debug.Log("untrigger with amplitude : " + releaseAmplitude);
         }
 
         public override float GetValue()

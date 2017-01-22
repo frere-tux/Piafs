@@ -18,7 +18,7 @@ namespace Piafs
                 mixedValue += oscillator.GetValue();
             }
 
-            return mixedValue;
+            return mixedValue * GetModulatedAmp();
         }
 
         public override float GetPositiveValue()

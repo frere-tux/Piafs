@@ -10,14 +10,18 @@ namespace Piafs
         public Slot slot;
         public Modulator modulator;
         [Header("-- Level design --")]
+        private Slot librarySlot;
+        public Slot LibrarySlot { get { return librarySlot; } }
         public Slot rightSlot;
 
         Collider2D col;
 
-        void Start()
+        void Awake()
         {
             col = GetComponent<Collider2D>();
-            SnapOn(slot);
+            librarySlot = slot;
+            if (rightSlot == null || !rightSlot.valid) rightSlot = librarySlot;
+            Drop(slot);
         }
 
         public void OnMouseDown()
@@ -33,7 +37,7 @@ namespace Piafs
             slot = _slot;
             col.enabled = true;
             SnapOn(slot);
-            slot.DropOscillator(modulator);
+            slot.DropBrick(this);
         }
 
         void SnapOn(Slot _slot)
@@ -46,6 +50,11 @@ namespace Piafs
         public override bool IsSolved()
         {
             return slot == rightSlot;
+        }
+
+        public void GetDependencies(List<Modulator> result)
+        {
+            modulator.GetDependenciesRecursive(result);
         }
     }
 }

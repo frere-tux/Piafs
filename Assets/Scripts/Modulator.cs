@@ -25,7 +25,7 @@ namespace Piafs
 
             foreach (Modulator freqModulator in freqModulators)
             {
-                modulatedFreq += freqModulator.GetValue();
+                if(freqModulator != null) modulatedFreq += freqModulator.GetValue();
             }
 
             return modulatedFreq;
@@ -102,6 +102,16 @@ namespace Piafs
             }
 
             return true;
+        }
+
+        public void GetDependenciesRecursive(List<Modulator> list)
+        {
+            //Debug.Log(name);
+            if (!list.Contains(this)) list.Add(this);
+
+            ampModulators.ForEach(a => a.GetDependenciesRecursive(list));
+            freqModulators.ForEach(a => a.GetDependenciesRecursive(list));
+            phaseModulators.ForEach(a => a.GetDependenciesRecursive(list));
         }
     }
 }

@@ -10,11 +10,19 @@ namespace Piafs
         public List<Modulator> ampModulators, freqModulators, phaseModulators;
         public List<Modulator> ampOutputs, freqOutputs, phaseOutputs;
 
-        private Modulator dropped;
+        public bool valid;
 
-        public void DropOscillator(Modulator _dropped)
+        private Brick slottedBrick;
+        public Brick SlottedBrick
         {
-            dropped = _dropped;
+            get { return slottedBrick; }
+        }
+
+        public void DropBrick(Brick _brick)
+        {
+            slottedBrick = _brick;
+            Modulator dropped = slottedBrick.modulator;
+
             dropped.ampModulators.AddRange(ampModulators);
             dropped.freqModulators.AddRange(freqModulators);
             dropped.phaseModulators.AddRange(phaseModulators);
@@ -26,15 +34,20 @@ namespace Piafs
 
         public void GrabOscillator()
         {
-            foreach (Modulator m in ampModulators) dropped.ampModulators.Remove(m);
-            foreach (Modulator m in freqModulators) dropped.freqModulators.Remove(m);
-            foreach (Modulator m in phaseModulators) dropped.phaseModulators.Remove(m);
+            if(slottedBrick != null)
+            {
+                Modulator dropped = slottedBrick.modulator;
 
-            foreach (Modulator m in ampOutputs) m.ampModulators.Remove (dropped);
-            foreach (Modulator m in freqOutputs) m.freqModulators.Remove(dropped);
-            foreach (Modulator m in phaseOutputs) m.phaseModulators.Remove(dropped);
+                foreach (Modulator m in ampModulators) dropped.ampModulators.Remove(m);
+                foreach (Modulator m in freqModulators) dropped.freqModulators.Remove(m);
+                foreach (Modulator m in phaseModulators) dropped.phaseModulators.Remove(m);
 
-            dropped = null;
+                foreach (Modulator m in ampOutputs) m.ampModulators.Remove(dropped);
+                foreach (Modulator m in freqOutputs) m.freqModulators.Remove(dropped);
+                foreach (Modulator m in phaseOutputs) m.phaseModulators.Remove(dropped);
+
+                slottedBrick = null;
+            }
         }
 
         public void OnMouseEnter()
@@ -45,6 +58,16 @@ namespace Piafs
         public void OnMouseExit()
         {
             InputManager.hoveredSlot = null;
+        }
+
+        public void GetDependencies(List<Modulator> result)
+        {
+            ampModulators.ForEach(a => a.GetDependenciesRecursive(result));
+            freqModulators.ForEach(a => a.GetDependenciesRecursive(result));
+            phaseModulators.ForEach(a => a.GetDependenciesRecursive(result));
+            ampOutputs.ForEach(a => a.GetDependenciesRecursive(result));
+            freqOutputs.ForEach(a => a.GetDependenciesRecursive(result));
+            phaseOutputs.ForEach(a => a.GetDependenciesRecursive(result));
         }
     }
 

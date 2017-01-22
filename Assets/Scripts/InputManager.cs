@@ -33,12 +33,14 @@ namespace Piafs
             {
                 if (hoveredSlot)
                 {
-                    draggedBrick.Drop(hoveredSlot);
+                    if(hoveredSlot.SlottedBrick == null && hoveredSlot.valid) 
+                    {
+                        draggedBrick.Drop(hoveredSlot);
+                        draggedBrick = null;
+                        return;
+                    }
                 }
-                else
-                {
-                    draggedBrick.Drop(draggedBrickOrigin);
-                }
+                draggedBrick.Drop(draggedBrick.LibrarySlot);
                 draggedBrick = null;
             }
         }

@@ -79,9 +79,16 @@ namespace Piafs
             fixedModulator.SetValueSmooth(Mathf.Lerp(min, max, smoothedValue));
         }
 
+        public void SolveValue()
+        {
+            steppedValue = rightValue - min;
+            sliderValue = steppedValue / (max - min);
+            smoothedValue = sliderValue;
+        }
+
         public override bool IsSolved()
         {
-            return steppedValue == rightValue;
+            return steppedValue+min == rightValue;
         }
     }
 }
