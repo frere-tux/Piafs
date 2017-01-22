@@ -54,5 +54,54 @@ namespace Piafs
 
             return modulatedAmp;
         }
+
+        public virtual bool Compare(Modulator other)
+        {
+            Type type = GetType();
+            Type otherType = other.GetType();
+
+            if (type != otherType)
+            {
+                return false;
+            }
+
+            if (freq != other.freq || amp != other.amp)
+            {
+                return false;
+            }
+
+            if (   freqModulators.Count != other.freqModulators.Count
+                || ampModulators.Count != other.ampModulators.Count
+                || phaseModulators.Count != other.phaseModulators.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0 ; i < freqModulators.Count; ++i)
+            {
+                if (!freqModulators[i].Compare(other.freqModulators[i]))
+                {
+                    return false;
+                }
+            }
+
+            for (int i = 0; i < ampModulators.Count; ++i)
+            {
+                if (!ampModulators[i].Compare(other.ampModulators[i]))
+                {
+                    return false;
+                }
+            }
+
+            for (int i = 0; i < phaseModulators.Count; ++i)
+            {
+                if (!phaseModulators[i].Compare(other.phaseModulators[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

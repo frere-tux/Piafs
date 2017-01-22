@@ -6,7 +6,7 @@ namespace Piafs
     [RequireComponent(typeof(AudioSource))]
     public class OscillatorTest : MonoBehaviour
     {
-        public Mixer mixer;
+        public Modulator modulator;
 
         public float debugScale = 0.01f;
         public float debugOffsetY = 5.0f;
@@ -22,14 +22,14 @@ namespace Piafs
 
         void OnAudioFilterRead(float[] data, int channels)
         {
-            if (mixer == null)
+            if (modulator == null)
             {
                 return;
             }
 
             for (int n = 0; n < data.Length; n += channels)
             {
-                float s = Mathf.Clamp(mixer.GetValue(), -1.0f, 1.0f);
+                float s = Mathf.Clamp(modulator.GetValue(), -1.0f, 1.0f);
 
                 for (int i = 0; i < channels; i++)
                 {
