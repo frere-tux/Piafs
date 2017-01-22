@@ -1,17 +1,29 @@
-﻿using System;
+﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Piafs
 {
-    class Mixer
+    public class Mixer : Modulator
     {
         public List<Modulator> oscillators;
 
-        public float GetValue()
+        public override float GetValue()
         {
-            return 0.0f;
+            float mixedValue = 0.0f;
+            foreach (Modulator oscillator in oscillators)
+            {
+                mixedValue += oscillator.GetValue();
+            }
+
+            return mixedValue;
+        }
+
+        public override float GetPositiveValue()
+        {
+            return GetValue();
         }
     }
 }

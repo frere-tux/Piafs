@@ -20,7 +20,7 @@ public static class Toolkit {
         {
             Vector3 start = new Vector3(0.0f, 0.0f, 0.0f);
             Vector3 end = new Vector3(scale, 0.0f, 0.0f);
-            Debug.DrawLine(start, end);
+            Debug.DrawLine(start, end, Color.red);
 
             return;
         }
