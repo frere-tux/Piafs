@@ -12,11 +12,39 @@ namespace Piafs
         [SerializeField]
         private AnimBird birdAnim;
         public Mixer birdMixer, playerMixer;
+        public Camera camera;
+        public float moveCameraDistance;
+        public float moveCameraSmothing;
+        public bool move = false;
+
+        private Vector3 baseCameraPosition;
+        private Vector3 moveCameraPosition;
 
         void Start()
         {
+            baseCameraPosition = camera.transform.position;
+            moveCameraPosition = baseCameraPosition;
+            moveCameraPosition.y -= moveCameraDistance;
+
             StartLevel(currentLevel);
         }
+
+        void Update()
+        {
+            Vector3 position = camera.transform.position;
+            if (move)
+            {
+                position = Toolkit.Damp(position, moveCameraPosition, moveCameraSmothing, Time.deltaTime);
+                camera.transform.position = position;
+            }
+            else
+            {
+                position = Toolkit.Damp(position, baseCameraPosition, moveCameraSmothing, Time.deltaTime);
+                camera.transform.position = position;
+            }
+        }
+
+        
 
         private void StartLevel(int _currentLevel)
         {
