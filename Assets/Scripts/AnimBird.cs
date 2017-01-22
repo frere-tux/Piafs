@@ -43,9 +43,14 @@ namespace Piafs
         public float headRotationSmoothing = 0.999f;
         public Modulator modulator;
 
+        [Header("Breath")]
+        public float breathFrequency = 3.0f;
+        public float breathRotationMax = 10.0f;
+
         private Vector3 baseBeakRotation;
         private Vector3 baseHeadRotation;
         private Vector3 baseBodyRotation;
+        private Vector3 baseTailRotation;
         private float smoothFreq = 0.0f;
 
         void Start()
@@ -61,6 +66,7 @@ namespace Piafs
             baseBeakRotation = beak.transform.localEulerAngles;
             baseHeadRotation = head.transform.localEulerAngles;
             baseBodyRotation = body.transform.localEulerAngles;
+            baseTailRotation = tail.transform.localEulerAngles;
 
             StartCoroutine(EyeBlink());
             StartCoroutine(Frown());
@@ -84,7 +90,7 @@ namespace Piafs
             beak.transform.localEulerAngles = beakRotation;
 
 
-            // Amplitude to Head
+            // Amplitude to Head, Body and tail
             float freq = modulator.GetModulatedFreq();
 
             freq = Mathf.Log(freq / 20.0f, 2.0f) * 0.1f;
@@ -100,8 +106,17 @@ namespace Piafs
 
             head.transform.localEulerAngles = headRotation;
 
+            Vector3 tailRotation = baseTailRotation;
+            tailRotation.z -= smoothFreq * bodyRotationMax * 8.0f;
+
+            tail.transform.localEulerAngles = tailRotation;
+
             Vector3 bodyRotation = baseBodyRotation;
             bodyRotation.z -= smoothFreq * bodyRotationMax;
+
+            // Breath
+            float breath = Mathf.Sin(Time.time * breathFrequency);
+            bodyRotation.z += breath * breathRotationMax;
 
             body.transform.localEulerAngles = bodyRotation;
         }
