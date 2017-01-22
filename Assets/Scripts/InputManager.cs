@@ -8,17 +8,21 @@ namespace Piafs
     {
         public static InputManager instance;
 
-        public static ModulatorSlot hoveredSlot;
-        public static ModulatorBrick draggedBrick;
-        public static ModulatorSlot draggedBrickOrigin;
+        public static Slot hoveredSlot;
+        public static Brick draggedBrick;
+        public static Slot draggedBrickOrigin;
         
         void Start()
         {
             instance = this;
         }
 
-        public static void Drag(ModulatorBrick brick)
+        public static void Drag(Brick brick)
         {
+            if(instance == null)
+            {
+                Debug.LogError("Error : No Input Manager in scene !");
+            }
             draggedBrick = brick;
             draggedBrickOrigin = brick.slot;
         }

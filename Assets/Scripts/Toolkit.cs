@@ -38,4 +38,24 @@ public static class Toolkit {
             }
         }
     }
+
+    public static float Damp(float source, float target, float smoothing, float dt)
+    {
+        return Mathf.Lerp(source, target, 1f - Mathf.Pow(1f - smoothing, dt));
+    }
+
+    public static Vector2 Damp(Vector2 source, Vector2 target, float smoothing, float dt)
+    {
+        return Vector2.Lerp(source, target, 1f - Mathf.Pow(1f - smoothing, dt));
+    }
+
+    public static Vector3 Damp(Vector3 source, Vector3 target, float smoothing, float dt)
+    {
+        return Vector3.Lerp(source, target, 1f - Mathf.Pow(1f - smoothing, dt));
+    }
+
+    public static float SignedAngle(Vector2 v, Vector2 v2)
+    {
+        return Mathf.Atan2(v2.y, v2.x) - Mathf.Atan2(v.y, v.x);
+    }
 }
