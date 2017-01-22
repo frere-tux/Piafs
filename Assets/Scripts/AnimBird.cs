@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Piafs
 {
-    class AnimBird : MonoBehaviour
+    public class AnimBird : MonoBehaviour
     {
         public SpriteRenderer eye;
         public SpriteRenderer eyebrow;

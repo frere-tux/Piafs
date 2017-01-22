@@ -7,13 +7,15 @@ namespace Piafs
 {
     public class LevelDescriptor : MonoBehaviour
     {
-        public Mixer birdMixer;
+        public Mixer birdMixer , playerMixer;
         [SerializeField]
         private AnimBird birdAnim;
         public float songIntervalMin, songIntervalMax;
         public bool debugLevel;
         [SerializeField]
         private SequenceElement[] birdSong;
+
+        public System.Action onLevelSolve;
 
         private List<Trigger> lastPlayerTriggers = new List<Trigger>();
         private List<LevelControls> levelControls;
@@ -22,6 +24,7 @@ namespace Piafs
         private bool playingSong = false;
         private LevelDescriptor sibling;
         private Coroutine playSong;
+
 
         [System.Serializable]
         private struct SequenceElement
@@ -33,10 +36,25 @@ namespace Piafs
             public Trigger pattern;
         }
 
-        void Start()
+        public void Init(AnimBird _birdAnim, Mixer _birdMixer, Mixer _playerMixer)
         {
+            birdAnim = _birdAnim;
+            birdMixer = _birdMixer;
+            playerMixer = _playerMixer;
+
             if(originalVersion)
             {
+                playerMixer.modulators.Clear();
+                OutputFlag flag = GetComponentInChildren<OutputFlag>();
+                if (flag == null)
+                {
+                    Debug.LogError("ERROR : NO OUTPUT FLAG IN LEVEL");
+                    return;
+                }
+                else
+                {
+                    playerMixer.modulators.Add(GetComponentInChildren<OutputFlag>().gameObject.GetComponent<Modulator>());
+                }
                 levelControls = GetComponentsInChildren<LevelControls>().ToList();
                 InstantiateBirdVersion();
                 foreach(SequenceElement seq in birdSong)
@@ -49,6 +67,12 @@ namespace Piafs
             {
                 playSong = StartCoroutine(PlaySong(1f));
             }
+        }
+
+        public void Destroy()
+        {
+            Destroy(sibling.gameObject);
+            Destroy(gameObject);
         }
 
         IEnumerator PlaySong(float delay)
@@ -93,7 +117,7 @@ namespace Piafs
             }
         }
 
-        public bool PlayerFinishesPattern(Trigger trigger, bool longEnough)
+        private void PlayerFinishesPattern(Trigger trigger, bool longEnough)
         {
             lastPlayerTriggers.Add(trigger);
             while(lastPlayerTriggers.Count > birdSong.Length)
@@ -103,10 +127,11 @@ namespace Piafs
             sibling.RescheduleSong();
             bool result = CheckVictory();
             Debug.Log("Victory ? " + result);
-            return result;
+            if (result && onLevelSolve != null) onLevelSolve();
+            return;
         }
 
-        public bool CheckVictory()
+        private bool CheckVictory()
         {
             bool levelControlsOk = levelControls.TrueForAll(control => control.IsSolved());
             bool triggersOk = true;
@@ -128,15 +153,15 @@ namespace Piafs
             return levelControlsOk && triggersOk;
         }
 
-        public void RescheduleSong()
+        private void RescheduleSong()
         {
             nextSongTime = Time.time + Random.Range(songIntervalMin, songIntervalMax);
         }
 
-        public void InstantiateBirdVersion()
+        private void InstantiateBirdVersion()
         {
             GameObject birdCopy = Instantiate(gameObject,gameObject.transform.position + Vector3.right * 50f, Quaternion.identity);
-            birdCopy.name = "Bird Model";
+            birdCopy.name = "Bird Synth";
             sibling = birdCopy.GetComponent<LevelDescriptor>();
             sibling.originalVersion = false;
             sibling.sibling = this;
@@ -168,9 +193,10 @@ namespace Piafs
             {
                 Debug.LogError("No output flag on level");
             }
+            sibling.Init(birdAnim, birdMixer, playerMixer);
         }
 
-        public List<Modulator> GetUsedModulators()
+        private List<Modulator> GetUsedModulators()
         {
             OutputFlag flag = GetComponentInChildren<OutputFlag>();
             if(!flag)
@@ -195,7 +221,7 @@ namespace Piafs
         }
 
         [ContextMenu("Tag all unused")]
-        public void DeleteUnusedModulators()
+        private void DeleteUnusedModulators()
         {
             List<Modulator> used = GetUsedModulators();
             List<Modulator> all = GetComponentsInChildren<Modulator>().ToList();
@@ -205,6 +231,8 @@ namespace Piafs
                 if (!a.name.StartsWith("UNUSED_")) a.name = "UNUSED_" + a.name;
             });
         }
+
+        
     }
 }
 
