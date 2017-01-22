@@ -19,7 +19,7 @@ namespace Piafs
 
         private int sampleTime;
         private int sampleRate;
-        private bool triggered = false;
+        private bool triggered = false; 
         private float attackAmplitude = 0f;
         private float releaseAmplitude = 0f;
         private float currentValue = 0f;
@@ -50,6 +50,7 @@ namespace Piafs
             sampleTime = 0;
             attackAmplitude = currentValue * releaseAmplitude;
             triggered = true;
+            Debug.Log("trigger");
         }
 
         public void Untrigger()
@@ -57,6 +58,7 @@ namespace Piafs
             triggered = false;
             releaseAmplitude = Mathf.Lerp(attackAmplitude, 1f, currentValue);
             sampleTime = 0;
+            Debug.Log("untrigger with amplitude : " + releaseAmplitude);
         }
 
         public override float GetValue()
@@ -65,9 +67,10 @@ namespace Piafs
             sampleTime++;
             if (triggered)
             {
-                if (!loop && sampleTime >= (attackDuration + releaseDuration + decayDuration) * sampleRate)
+                if (!loop && sampleTime >= (attackDuration + decayDuration) * sampleRate)
                 {
                     Untrigger();
+                    return releaseAmplitude;
                 }
                 if (sampleTime < attackDuration * sampleRate)
                 {

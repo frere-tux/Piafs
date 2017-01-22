@@ -17,6 +17,7 @@ namespace Piafs
 
         public void OnMouseDown()
         {
+            //Debug.Log("mousedown");
             InputManager.Drag(this);
             col.enabled = false;
             slot.GrabOscillator();
