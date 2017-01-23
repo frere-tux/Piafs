@@ -13,7 +13,7 @@ namespace Piafs
         [SerializeField]
         private AnimBirdCarton cartonAnim;
         public float songIntervalMin, songIntervalMax;
-        //public float answerIntervalMin, answerIntervalMax;
+        public float answerIntervalMin, answerIntervalMax;
         [SerializeField]
         private SequenceElement[] birdSong;
         [Header("Debug")]
@@ -102,7 +102,7 @@ namespace Piafs
                 seq.pattern.envelopes.ForEach(e => e.Untrigger());
                 yield return new WaitForSeconds(seq.pause + Random.Range(-seq.pauseRandomization, seq.pauseRandomization));
             }
-            RescheduleSong();
+            RescheduleSong(songIntervalMin,songIntervalMax);
         }
 
         void PlayerPlaysPattern()
@@ -143,7 +143,7 @@ namespace Piafs
             {
                 lastPlayerTriggers.RemoveAt(0);
             }
-            if(!doNotGenerateBird)sibling.RescheduleSong();
+            if(!doNotGenerateBird)sibling.RescheduleSong(answerIntervalMin,answerIntervalMax);
             bool result = CheckVictory();
             Debug.Log("Victory ? " + result);
             if (result && onLevelSolve != null) onLevelSolve();
@@ -172,9 +172,9 @@ namespace Piafs
             return levelControlsOk && triggersOk;
         }
 
-        private void RescheduleSong()
+        private void RescheduleSong(float min, float max)
         {
-            nextSongTime = Time.time + Random.Range(songIntervalMin, songIntervalMax);
+            nextSongTime = Time.time + Random.Range(min, max);
         }
 
         private void InstantiateBirdVersion()

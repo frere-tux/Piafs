@@ -11,6 +11,7 @@ namespace Piafs
         public static Slot hoveredSlot;
         public static Brick draggedBrick;
         public static Slot draggedBrickOrigin;
+        public static float brickZ;
         
         void Start()
         {
@@ -25,12 +26,16 @@ namespace Piafs
             }
             draggedBrick = brick;
             draggedBrickOrigin = brick.slot;
+            brickZ = draggedBrick.transform.position.z;
         }
 
         public static void Drop()
         {
             if(draggedBrick != null)
             {
+                Vector3 brickPos = draggedBrick.transform.position;
+                brickPos.z = brickZ;
+                draggedBrick.transform.position = brickPos;
                 if (hoveredSlot)
                 {
                     if(hoveredSlot.valid) 
@@ -58,7 +63,7 @@ namespace Piafs
             if(draggedBrick != null)
             {
                 Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                mouseWorldPos.z = draggedBrick.transform.position.z;
+                mouseWorldPos.z = brickZ - 0.1f;
                 draggedBrick.transform.position = mouseWorldPos;
 
                 if (Input.GetMouseButtonUp(0))
