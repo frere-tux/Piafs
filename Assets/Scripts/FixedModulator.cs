@@ -6,14 +6,16 @@ using System.Text;
 
 namespace Piafs
 {
+    [AddComponentMenu("Modulator/Fixed Modulator", -80)]
     public class FixedModulator : Modulator
     {
         private float smoothing = 0f;
         private float rawAmp;
         private float smoothThreshold = 1f;
 
-        void Start()
+        protected override void Start()
         {
+            base.Start();
             rawAmp = amp;
         }
 

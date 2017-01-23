@@ -13,9 +13,13 @@ namespace Piafs
         [SerializeField]
         private AnimBirdCarton cartonAnim;
         public float songIntervalMin, songIntervalMax;
-        public bool debugLevel;
+        //public float answerIntervalMin, answerIntervalMax;
         [SerializeField]
         private SequenceElement[] birdSong;
+        [Header("Debug")]
+        public bool debugLevel;
+        public bool doNotGenerateBird;
+        
 
         public System.Action onLevelSolve;
 
@@ -68,7 +72,7 @@ namespace Piafs
                     playerMixer.modulators.Add(GetComponentInChildren<OutputFlag>().gameObject.GetComponent<Modulator>());
                 }
                 levelControls = GetComponentsInChildren<LevelControls>().ToList();
-                InstantiateBirdVersion();
+                if(!doNotGenerateBird) InstantiateBirdVersion();
                 foreach(SequenceElement seq in birdSong)
                 {
                     seq.pattern.onEndTrigger += delegate (Trigger trigger, bool longEnough) { PlayerFinishesPattern(trigger, longEnough); };
@@ -93,9 +97,9 @@ namespace Piafs
             yield return new WaitForSeconds(delay);
             foreach(SequenceElement seq in birdSong)
             {
-                seq.pattern.envelope.Trigger();
+                seq.pattern.envelopes.ForEach(e=>e.Trigger());
                 yield return new WaitForSeconds(seq.duration + Random.Range(-seq.randomization, seq.randomization));
-                seq.pattern.envelope.Untrigger();
+                seq.pattern.envelopes.ForEach(e => e.Untrigger());
                 yield return new WaitForSeconds(seq.pause + Random.Range(-seq.pauseRandomization, seq.pauseRandomization));
             }
             RescheduleSong();
@@ -103,7 +107,7 @@ namespace Piafs
 
         void PlayerPlaysPattern()
         {
-            sibling.StopPattern();
+            if(!doNotGenerateBird)sibling.StopPattern();
             cartonAnim.move = true;
         }
 
@@ -112,7 +116,7 @@ namespace Piafs
             nextSongTime = -1f;
             foreach (SequenceElement seq in birdSong)
             {
-                seq.pattern.envelope.Untrigger();
+                seq.pattern.envelopes.ForEach(e=>e.Untrigger());
             }
             if(playSong != null) StopCoroutine(playSong);
             
@@ -139,7 +143,7 @@ namespace Piafs
             {
                 lastPlayerTriggers.RemoveAt(0);
             }
-            sibling.RescheduleSong();
+            if(!doNotGenerateBird)sibling.RescheduleSong();
             bool result = CheckVictory();
             Debug.Log("Victory ? " + result);
             if (result && onLevelSolve != null) onLevelSolve();
@@ -176,6 +180,7 @@ namespace Piafs
         private void InstantiateBirdVersion()
         {
             GameObject birdCopy = Instantiate(gameObject,gameObject.transform.position + Vector3.right * 50f, Quaternion.identity);
+            birdCopy.transform.SetParent(transform.parent, true);
             birdCopy.name = "Bird Synth";
             sibling = birdCopy.GetComponent<LevelDescriptor>();
             sibling.originalVersion = false;
@@ -246,6 +251,7 @@ namespace Piafs
                 Debug.Log("Unused : " + a.name);
                 if (!a.name.StartsWith("UNUSED_")) a.name = "UNUSED_" + a.name;
             });
+            if (unused.Count == 0) Debug.Log("No unused modulators !");
         }
 
         

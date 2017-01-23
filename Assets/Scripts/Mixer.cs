@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Piafs
 {
+    [AddComponentMenu("Modulator/Mixer", -80)]
     public class Mixer : Modulator
     {
         public List<Modulator> modulators;

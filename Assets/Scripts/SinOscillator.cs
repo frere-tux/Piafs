@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Piafs
 {
+    [AddComponentMenu("Oscillator/Sin Oscillator", -80)]
     public class SinOscillator : Oscillator
     {
         protected override float ComputeSample()

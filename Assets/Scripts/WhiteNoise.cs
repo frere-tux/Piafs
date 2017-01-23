@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Piafs
 {
+    [AddComponentMenu("Modulator/White noise", -80)]
     class WhiteNoise : Modulator
     {
-        private Random randomizer = new Random();
+        private System.Random randomizer = new System.Random();
         private float value = 0.0f;
 
         public override float GetValue()

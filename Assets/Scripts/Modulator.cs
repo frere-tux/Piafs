@@ -19,6 +19,11 @@ namespace Piafs
         public abstract float GetValue();
         public abstract float GetPositiveValue();
 
+        protected virtual void Start()
+        {
+            CleanLists();
+        }
+
         public virtual float GetLastPositiveValue()
         {
             return GetPositiveValue();
@@ -123,12 +128,20 @@ namespace Piafs
 
         public void GetDependenciesRecursive(List<Modulator> list)
         {
+            CleanLists();
             //Debug.Log(name);
             if (!list.Contains(this)) list.Add(this);
 
             ampModulators.ForEach(a => a.GetDependenciesRecursive(list));
             freqModulators.ForEach(a => a.GetDependenciesRecursive(list));
             phaseModulators.ForEach(a => a.GetDependenciesRecursive(list));
+        }
+
+        private void CleanLists()
+        {
+            Toolkit.CleanList(freqModulators);
+            Toolkit.CleanList(phaseModulators);
+            Toolkit.CleanList(ampModulators);
         }
     }
 }

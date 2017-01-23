@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Piafs
 {
+    [AddComponentMenu("Modulator/Random Fixed Modulator", -80)]
     class RandomFixedModulator : Modulator
     {
         public bool debug = false;
@@ -13,7 +14,7 @@ namespace Piafs
         private System.Random randomizer = new System.Random();
         private float value = 0.0f;
 
-        public void Start()
+        protected override void Start()
         {
             value = (float)randomizer.NextDouble();
         }

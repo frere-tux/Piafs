@@ -7,6 +7,7 @@ using System.Text;
 namespace Piafs
 {
     [System.Serializable]
+    [AddComponentMenu("Oscillator/Square Oscillator", -80)]
     public class SquareOscillator : Oscillator
     {
         protected override float ComputeSample()

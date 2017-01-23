@@ -6,7 +6,7 @@ namespace Piafs
 {
     public class LevelManager : MonoBehaviour
     {
-        public LevelDescriptor[] levelPrefabs;
+        public LevelDescriptor[] levels;
         public int currentLevel = 0;
 
         [SerializeField]
@@ -14,6 +14,7 @@ namespace Piafs
         [SerializeField]
         private AnimBirdCarton cartonAnim;
         public Mixer birdMixer, playerMixer;
+        public GameObject interfaceParent;
         public Camera camera;
         public float moveCameraDistance;
         public float moveCameraSmothing;
@@ -27,7 +28,11 @@ namespace Piafs
             baseCameraPosition = camera.transform.position;
             moveCameraPosition = baseCameraPosition;
             moveCameraPosition.y -= moveCameraDistance;
-
+            int childCount = transform.childCount;
+            for(int i = 0; i < childCount; i++)
+            {
+                transform.GetChild(i).gameObject.SetActive(false);
+            }
             StartLevel(currentLevel);
         }
 
@@ -50,7 +55,11 @@ namespace Piafs
 
         private void StartLevel(int _currentLevel)
         {
-            LevelDescriptor lvl = Instantiate(levelPrefabs[_currentLevel].gameObject).GetComponent<LevelDescriptor>();
+            LevelDescriptor lvl = Instantiate(levels[_currentLevel].gameObject,interfaceParent.transform,false).GetComponent<LevelDescriptor>();
+            lvl.gameObject.name = levels[_currentLevel].name + " - Playing Now";
+            lvl.gameObject.SetActive(true);
+            lvl.debugLevel = false;
+            lvl.doNotGenerateBird = false;
             lvl.onLevelSolve += delegate () { SolveLevel(lvl); };
             lvl.Init(birdAnim, cartonAnim, birdMixer,playerMixer);
             move = true;
@@ -60,7 +69,7 @@ namespace Piafs
         {
             _level.Destroy();
             currentLevel++;
-            if(levelPrefabs.Length > currentLevel)
+            if(levels.Length > currentLevel)
             {
                 StartLevel(currentLevel);
             }

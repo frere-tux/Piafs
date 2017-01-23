@@ -129,7 +129,8 @@ MonoBehaviour:
   sliderValue: 0
   fixedModulator: {fileID: 0}
   movingPart: {fileID: 1483684716657710}
-  fullDragWorldDistance: 1.5
+  fullDragWorldDistance: 1.7
+  fullDragDistance: 90
   sliderSmoothing: 0.0033
   sliderSmoothThreshold: 0.001
   rightValue: 600

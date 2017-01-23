@@ -58,4 +58,16 @@ public static class Toolkit {
     {
         return Mathf.Atan2(v2.y, v2.x) - Mathf.Atan2(v.y, v.x);
     }
+
+    public static void CleanList<T>(List<T> list)
+    {
+        for(int i = 0; i < list.Count; i++)
+        {
+            if (list[i] == null)
+            {
+                list.RemoveAt(i);
+                i--;
+            }
+        }
+    }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Piafs
 {
+    [AddComponentMenu("Modulator/Filter Modulator (WIP)", -80)]
     public class FilterModulator :  Modulator
     {
         public float cutoff;
@@ -12,8 +13,9 @@ namespace Piafs
         [Range(1, 1023)]
         public int smoothLength;
 
-        void Start()
+        protected override void Start()
         {
+            base.Start();
             buffer = new List<float>(1024);
             for (int i = 0; i < buffer.Capacity; i++) buffer.Add(0f);
         }

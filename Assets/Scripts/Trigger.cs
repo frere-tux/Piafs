@@ -6,7 +6,7 @@ namespace Piafs
 {
     public class Trigger : MonoBehaviour
     {
-        public Envelope envelope;
+        public List<Envelope> envelopes;
         public float minTriggerTime;
         public Sprite[] sprites;
 
@@ -25,7 +25,10 @@ namespace Piafs
         void OnMouseDown()
         {
             triggered = true;
-            envelope.Trigger();
+            foreach (Envelope e in envelopes)
+            {
+                e.Trigger();
+            }
             triggerTime = Time.time;
             if (onStartTrigger != null) onStartTrigger();
             spriteRenderer.sprite = sprites[1];
@@ -37,7 +40,7 @@ namespace Piafs
             if(Input.GetMouseButtonUp(0) && triggered)
             {
                 triggered = false;
-                envelope.Untrigger();
+                envelopes.ForEach(e=>e.Untrigger());
                 triggerTime = Time.time - triggerDuration;
                 if (onEndTrigger != null) onEndTrigger(this, triggerTime > minTriggerTime);
                 spriteRenderer.sprite = sprites[0];

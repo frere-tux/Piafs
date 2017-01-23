@@ -12,6 +12,7 @@ namespace Piafs
         [Header("-- Interface --")]
         public GameObject movingPart;
         public float fullDragWorldDistance;
+        public float fullDragDistance;
         public float sliderSmoothing = 0.0033f;
         public float sliderSmoothThreshold = 0.001f;
         [Header("-- Level design --")]
@@ -21,15 +22,13 @@ namespace Piafs
         private Collider2D col;
         private float yDragStart;
         private Vector3 movingPartOrigin;
-        private float fullDragDistance;
         private float steppedValue;
         private float smoothedValue;
 
         void Start()
         {
             col = GetComponent<Collider2D>();
-            movingPartOrigin = movingPart.transform.position;
-            fullDragDistance = Camera.main.WorldToScreenPoint(Vector3.up * fullDragWorldDistance).y * 0.22f;
+            movingPartOrigin = movingPart.transform.localPosition;
             if(fixedModulator != null)fixedModulator.SetSmoothing(sliderSmoothing,(max-min)* sliderSmoothThreshold);
             Refresh();
         }
@@ -72,7 +71,7 @@ namespace Piafs
 
         public void RefreshVisual()
         {
-            movingPart.transform.position = movingPartOrigin + Vector3.up * fullDragWorldDistance * smoothedValue;
+            movingPart.transform.localPosition = movingPartOrigin + Vector3.up * fullDragWorldDistance * smoothedValue;
         }
 
         public void RefreshFixedModulator()
