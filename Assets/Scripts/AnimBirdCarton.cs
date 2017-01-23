@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Piafs
 {
-    class AnimBirdCarton : MonoBehaviour
+    public class AnimBirdCarton : MonoBehaviour
     {
         public SpriteRenderer stick;
         public Modulator modulator;

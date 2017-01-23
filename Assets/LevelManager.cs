@@ -11,6 +11,8 @@ namespace Piafs
 
         [SerializeField]
         private AnimBird birdAnim;
+        [SerializeField]
+        private AnimBirdCarton cartonAnim;
         public Mixer birdMixer, playerMixer;
         public Camera camera;
         public float moveCameraDistance;
@@ -50,7 +52,8 @@ namespace Piafs
         {
             LevelDescriptor lvl = Instantiate(levelPrefabs[_currentLevel].gameObject).GetComponent<LevelDescriptor>();
             lvl.onLevelSolve += delegate () { SolveLevel(lvl); };
-            lvl.Init(birdAnim, birdMixer,playerMixer);
+            lvl.Init(birdAnim, cartonAnim, birdMixer,playerMixer);
+            move = true;
         }
 
         private void SolveLevel(LevelDescriptor _level)

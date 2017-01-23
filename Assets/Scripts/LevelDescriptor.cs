@@ -10,6 +10,8 @@ namespace Piafs
         public Mixer birdMixer , playerMixer;
         [SerializeField]
         private AnimBird birdAnim;
+        [SerializeField]
+        private AnimBirdCarton cartonAnim;
         public float songIntervalMin, songIntervalMax;
         public bool debugLevel;
         [SerializeField]
@@ -40,13 +42,14 @@ namespace Piafs
         {
             if(debugLevel)
             {
-                Init(birdAnim, birdMixer, playerMixer);
+                Init(birdAnim, cartonAnim, birdMixer, playerMixer);
             }
         }
 
-        public void Init(AnimBird _birdAnim, Mixer _birdMixer, Mixer _playerMixer)
+        public void Init(AnimBird _birdAnim, AnimBirdCarton _cartonAnim, Mixer _birdMixer, Mixer _playerMixer)
         {
             birdAnim = _birdAnim;
+            cartonAnim = _cartonAnim;
             birdMixer = _birdMixer;
             playerMixer = _playerMixer;
 
@@ -61,6 +64,7 @@ namespace Piafs
                 }
                 else
                 {
+                    cartonAnim.modulator = flag.gameObject.GetComponent<Modulator>();
                     playerMixer.modulators.Add(GetComponentInChildren<OutputFlag>().gameObject.GetComponent<Modulator>());
                 }
                 levelControls = GetComponentsInChildren<LevelControls>().ToList();
@@ -100,6 +104,7 @@ namespace Piafs
         void PlayerPlaysPattern()
         {
             sibling.StopPattern();
+            cartonAnim.move = true;
         }
 
         void StopPattern()
@@ -110,6 +115,7 @@ namespace Piafs
                 seq.pattern.envelope.Untrigger();
             }
             if(playSong != null) StopCoroutine(playSong);
+            
         }
 
         void Update()
@@ -127,6 +133,7 @@ namespace Piafs
 
         private void PlayerFinishesPattern(Trigger trigger, bool longEnough)
         {
+            cartonAnim.move = false;
             lastPlayerTriggers.Add(trigger);
             while(lastPlayerTriggers.Count > birdSong.Length)
             {
@@ -196,12 +203,13 @@ namespace Piafs
             {
                 birdMixer.modulators.Add(outputFlag.gameObject.GetComponent<Modulator>());
                 birdAnim.modulator = outputFlag.gameObject.GetComponent<Modulator>();
+                
             }
             else
             {
                 Debug.LogError("No output flag on level");
             }
-            sibling.Init(birdAnim, birdMixer, playerMixer);
+            sibling.Init(birdAnim, cartonAnim, birdMixer, playerMixer);
         }
 
         private List<Modulator> GetUsedModulators()
