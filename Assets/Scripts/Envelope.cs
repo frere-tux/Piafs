@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Piafs
 {
+    [AddComponentMenu("Modulator/Envelope", -80)]
     public class Envelope : Modulator
     {
         public AnimationCurve attack;
@@ -24,8 +25,9 @@ namespace Piafs
         private float releaseAmplitude = 0f;
         private float currentValue = 0f;
 
-        void Start()
+        protected override void Start()
         {
+            base.Start();
             sampleRate = AudioSettings.outputSampleRate;
         }
 

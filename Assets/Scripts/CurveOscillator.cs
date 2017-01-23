@@ -7,6 +7,7 @@ using System.Text;
 namespace Piafs
 {
     [System.Serializable]
+    [AddComponentMenu("Oscillator/Curve Oscillator", -80)]
     public class CurveOscillator : Oscillator
     {
         public AnimationCurve curve;

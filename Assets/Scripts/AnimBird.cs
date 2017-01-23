@@ -77,6 +77,7 @@ namespace Piafs
         void Update()
         {
             // Amplitude to Beak
+            if (modulator == null) return;
             float amp = modulator.GetModulatedAmp(true);
             amp = Mathf.Clamp01(amp);
 

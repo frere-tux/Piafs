@@ -31,6 +31,7 @@ namespace Piafs
 
         void Update()
         {
+            if (modulator == null) return;
             Vector3 position = stick.transform.localPosition;
             Vector3 fromBaseToPosition = position - baseStickPosition;
             if (move)
