@@ -147,7 +147,7 @@ namespace Piafs
 			phaseModulators.ForEach(a => a.GetDependenciesRecursive(list));
 		}
 
-		private void CleanLists()
+		public void CleanLists()
 		{
 			Toolkit.CleanList(freqModulators);
 			Toolkit.CleanList(phaseModulators);

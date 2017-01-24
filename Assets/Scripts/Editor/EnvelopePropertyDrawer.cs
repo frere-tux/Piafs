@@ -25,13 +25,14 @@ namespace Piafs
             EditorGUI.EndProperty();
 
             float min = 0f, max = 1f;
-            attackPoint.intValue = Mathf.Clamp(attackPoint.intValue, 0, k.Length - 1);
-            releasePoint.intValue = Mathf.Clamp(releasePoint.intValue, -k.Length + 1, 0);
+            attackPoint.intValue = Mathf.Clamp(attackPoint.intValue, 1, k.Length - 2);
+            releasePoint.intValue = Mathf.Clamp(releasePoint.intValue, -k.Length +2, -1);
             float envTime = 1f;
             if (k.Length > 0)
             {
                 envTime = k[k.Length - 1].time;
-                k[0] = new Keyframe(0f, 0f);
+				k[0].time = 0f;
+				k[0].value = 0f;
                 k[k.Length - 1].value = 0f;
                 curve.animationCurveValue = new AnimationCurve(k);
                 min = k[attackPoint.intValue].time / envTime;
@@ -41,7 +42,7 @@ namespace Piafs
             position.height *= 0.2f;
             GUI.color = Color.cyan;
             EditorGUI.MinMaxSlider(position,ref min, ref max, 0f, 1f);
-            for(int i = 0; i < k.Length - 2; i++)
+            /*for(int i = 1; i < k.Length - 3; i++)
             {
                 if(min * envTime > k[i].time / envTime && min * envTime < k[i+1].time / envTime)
                 {
@@ -69,7 +70,7 @@ namespace Piafs
                         releasePoint.intValue = -(k.Length - 1 - (i+1));
                     }
                 }
-            }
+            }*/
             position.y += position.height;
             EditorGUI.PropertyField(position,attackPoint);
             position.y += position.height;

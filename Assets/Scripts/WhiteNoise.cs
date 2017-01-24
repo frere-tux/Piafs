@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Piafs
 {
     [AddComponentMenu("Modulator/White noise", -80)]
-    class WhiteNoise : Modulator
+    public class WhiteNoise : Modulator
     {
         private System.Random randomizer = new System.Random();
         private float value = 0.0f;

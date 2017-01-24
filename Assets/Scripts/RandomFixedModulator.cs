@@ -7,7 +7,7 @@ using System.Text;
 namespace Piafs
 {
     [AddComponentMenu("Modulator/Random Fixed Modulator", -80)]
-    class RandomFixedModulator : Modulator
+    public class RandomFixedModulator : Modulator
     {
         public bool debug = false;
 

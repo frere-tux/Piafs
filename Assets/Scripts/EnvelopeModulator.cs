@@ -12,7 +12,7 @@ namespace Piafs
         [System.Serializable]
         public class EnvelopeCurve
         {
-            public AnimationCurve curve = AnimationCurve.Linear(0f,0f,1f,1f);
+            public AnimationCurve curve = AnimationCurve.Linear(0f,0f,0f,0f);
             public int attackPoint;
             public int releasePoint;
             public bool loop;
