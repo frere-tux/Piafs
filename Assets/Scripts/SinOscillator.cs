@@ -13,5 +13,5 @@ namespace Piafs
         {
             return Mathf.Sin(GetModulatedPhase() * 2.0f * 3.1415926f);
         }
-    }
+	}
 }

@@ -31,7 +31,7 @@ namespace Piafs
             }
         }
 
-        public void Trigger()
+        public override void Trigger()
         {
             value = (float)randomizer.NextDouble();
         }

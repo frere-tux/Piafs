@@ -6,13 +6,13 @@ using UnityEngine;
 
 namespace Piafs
 {
-    [AddComponentMenu("Modulator/Envelope", -80)]
-    public class Envelope : Modulator
+    [AddComponentMenu("Modulator/EnvelopeModulator", -80)]
+    public class EnvelopeModulator : Modulator
     {
         [System.Serializable]
         public class EnvelopeCurve
         {
-            public AnimationCurve curve;
+            public AnimationCurve curve = AnimationCurve.Linear(0f,0f,1f,1f);
             public int attackPoint;
             public int releasePoint;
             public bool loop;
@@ -39,19 +39,12 @@ namespace Piafs
         }
 
         public EnvelopeCurve env;
-
-        public AnimationCurve attack;
-        public float attackDuration;
-        public AnimationCurve decay;
-        public float decayDuration;
-        public AnimationCurve release;
-        public float releaseDuration;
-        public bool loop;
         public bool debugEnvelope;
 
         private int sampleTime;
+        private float time;
         private int sampleRate;
-        private bool triggered = false; 
+        private bool triggered = false;
         private float attackStrength = 0f;
         private float releaseStrength = 0f;
         private float currentValue = 0f;
@@ -60,16 +53,15 @@ namespace Piafs
         {
             base.Start();
             sampleRate = AudioSettings.outputSampleRate;
-            Debug.Log(gameObject.name);
-            
+
         }
 
         void Update()
         {
 
-            if(debugEnvelope)
+            if (debugEnvelope)
             {
-                if(Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetKeyDown(KeyCode.Space))
                 {
                     Trigger();
                 }
@@ -83,37 +75,37 @@ namespace Piafs
         public override void Trigger()
         {
             sampleTime = 0;
-            attackStrength = currentValue * releaseStrength;
+            attackStrength = currentValue;
             triggered = true;
         }
 
         public override void Untrigger()
         {
             triggered = false;
-            releaseStrength = Mathf.Lerp(attackStrength, 1f, currentValue);
-            sampleTime = 0;
-        }
-
-        public float newGetValue()
-        {
-            sampleTime++;
-            float time = sampleTime / (float)sampleRate;
-            if (triggered)
-            {
-                float stopTime = env.GetReleaseTime();
-                currentValue = attackStrength + (1f - env.GetAttackAmp()) * env.curve.Evaluate(env.loop ? Mathf.Min(stopTime, time):time);
-                return currentValue;
-            }
-            else
-            {
-                currentValue = releaseStrength * env.GetReleaseAmp() * env.curve.Evaluate(time);
-                return currentValue;
-            }
+            releaseStrength = currentValue;
+            sampleTime = Mathf.RoundToInt(env.GetReleaseTime() * sampleRate);
         }
 
         public override float GetValue()
         {
-            
+            sampleTime++;
+            time = sampleTime / (float)sampleRate;
+            if (triggered)
+            {
+                float stopTime = env.GetReleaseTime();
+                currentValue = attackStrength + (1f - attackStrength) * env.curve.Evaluate(env.loop ? Mathf.Min(stopTime, time) : time);
+                return currentValue * GetModulatedAmp();
+            }
+            else
+            {
+                currentValue = releaseStrength * env.curve.Evaluate(time) / env.GetReleaseAmp();
+                return currentValue * GetModulatedAmp();
+            }
+        }
+        /*
+        public float OldGetValue()
+        {
+
             sampleTime++;
             if (triggered)
             {
@@ -125,7 +117,7 @@ namespace Piafs
                 if (sampleTime < attackDuration * sampleRate)
                 {
                     currentValue = attack.Evaluate((sampleTime / (float)sampleRate) / attackDuration);
-                    return Mathf.Lerp(attackStrength,1f, currentValue) * GetModulatedAmp();
+                    return Mathf.Lerp(attackStrength, 1f, currentValue) * GetModulatedAmp();
                 }
                 else
                 {
@@ -147,6 +139,7 @@ namespace Piafs
                 }
             }
         }
+        */
 
         public override float GetPositiveValue()
         {

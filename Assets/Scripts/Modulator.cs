@@ -6,142 +6,152 @@ using System.Text;
 
 namespace Piafs
 {
-    public abstract class Modulator : MonoBehaviour
-    {
-        public float freq = 1.0f;
-        public float amp = 1.0f;
-        protected float phase = 0.0f;
+	public abstract class Modulator : MonoBehaviour
+	{
+		public float freq = 1.0f;
+		public float amp = 1.0f;
+		protected float phase = 0.0f;
 
-        public List<Modulator> freqModulators;
-        public List<Modulator> phaseModulators;
-        public List<Modulator> ampModulators;
+		public List<Modulator> freqModulators;
+		public List<Modulator> phaseModulators;
+		public List<Modulator> ampModulators;
 
-        public abstract float GetValue();
-        public abstract float GetPositiveValue();
+		public abstract float GetValue();
+		public abstract float GetPositiveValue();
 
-        protected virtual void Start()
-        {
-            CleanLists();
-        }
+		protected virtual void Start()
+		{
+			CleanLists();
+		}
 
-        public virtual float GetLastPositiveValue()
-        {
-            return GetPositiveValue();
-        }
+		public virtual float GetLastPositiveValue()
+		{
+			return GetPositiveValue();
+		}
 
-        public float GetModulatedFreq()
-        {
-            float modulatedFreq = freq;
+		public virtual void Trigger()
+		{
 
-            foreach (Modulator freqModulator in freqModulators)
-            {
-                if(freqModulator != null) modulatedFreq += freqModulator.GetValue();
-            }
+		}
 
-            return modulatedFreq;
-        }
+		public virtual void Untrigger()
+		{
 
-        public float GetModulatedPhase()
-        {
-            float modulatedPhase = phase;
+		}
 
-            foreach (Modulator phaseModulator in phaseModulators)
-            {
-                modulatedPhase += phaseModulator.GetValue();
-            }
+		public float GetModulatedFreq()
+		{
+			float modulatedFreq = freq;
 
-            return modulatedPhase;
-        }
+			foreach (Modulator freqModulator in freqModulators)
+			{
+				if (freqModulator != null) modulatedFreq += freqModulator.GetValue();
+			}
 
-        public float GetModulatedAmp(bool lastValue = false)
-        {
-            float modulatedAmp = amp;
+			return modulatedFreq;
+		}
 
-            if (lastValue)
-            {
-                foreach (Modulator ampModulator in ampModulators)
-                {
-                    modulatedAmp += ampModulator.GetPositiveValue();
-                }
-            }
-            else
-            {
-                foreach (Modulator ampModulator in ampModulators)
-                {
-                    modulatedAmp += ampModulator.GetPositiveValue();
-                }
-            }
+		public float GetModulatedPhase()
+		{
+			float modulatedPhase = phase;
 
-            
+			foreach (Modulator phaseModulator in phaseModulators)
+			{
+				modulatedPhase += phaseModulator.GetValue();
+			}
 
-            return modulatedAmp;
-        }
+			return modulatedPhase;
+		}
 
-        public virtual bool Compare(Modulator other)
-        {
-            Type type = GetType();
-            Type otherType = other.GetType();
+		public float GetModulatedAmp(bool lastValue = false)
+		{
+			float modulatedAmp = amp;
 
-            if (type != otherType)
-            {
-                return false;
-            }
+			if (lastValue)
+			{
+				foreach (Modulator ampModulator in ampModulators)
+				{
+					modulatedAmp += ampModulator.GetPositiveValue();
+				}
+			}
+			else
+			{
+				foreach (Modulator ampModulator in ampModulators)
+				{
+					modulatedAmp += ampModulator.GetPositiveValue();
+				}
+			}
 
-            if (freq != other.freq || amp != other.amp)
-            {
-                return false;
-            }
 
-            if (   freqModulators.Count != other.freqModulators.Count
-                || ampModulators.Count != other.ampModulators.Count
-                || phaseModulators.Count != other.phaseModulators.Count)
-            {
-                return false;
-            }
 
-            for (int i = 0 ; i < freqModulators.Count; ++i)
-            {
-                if (!freqModulators[i].Compare(other.freqModulators[i]))
-                {
-                    return false;
-                }
-            }
+			return modulatedAmp;
+		}
 
-            for (int i = 0; i < ampModulators.Count; ++i)
-            {
-                if (!ampModulators[i].Compare(other.ampModulators[i]))
-                {
-                    return false;
-                }
-            }
+		public virtual bool Compare(Modulator other)
+		{
+			Type type = GetType();
+			Type otherType = other.GetType();
 
-            for (int i = 0; i < phaseModulators.Count; ++i)
-            {
-                if (!phaseModulators[i].Compare(other.phaseModulators[i]))
-                {
-                    return false;
-                }
-            }
+			if (type != otherType)
+			{
+				return false;
+			}
 
-            return true;
-        }
+			if (freq != other.freq || amp != other.amp)
+			{
+				return false;
+			}
 
-        public void GetDependenciesRecursive(List<Modulator> list)
-        {
-            CleanLists();
-            //Debug.Log(name);
-            if (!list.Contains(this)) list.Add(this);
+			if (freqModulators.Count != other.freqModulators.Count
+				|| ampModulators.Count != other.ampModulators.Count
+				|| phaseModulators.Count != other.phaseModulators.Count)
+			{
+				return false;
+			}
 
-            ampModulators.ForEach(a => a.GetDependenciesRecursive(list));
-            freqModulators.ForEach(a => a.GetDependenciesRecursive(list));
-            phaseModulators.ForEach(a => a.GetDependenciesRecursive(list));
-        }
+			for (int i = 0; i < freqModulators.Count; ++i)
+			{
+				if (!freqModulators[i].Compare(other.freqModulators[i]))
+				{
+					return false;
+				}
+			}
 
-        private void CleanLists()
-        {
-            Toolkit.CleanList(freqModulators);
-            Toolkit.CleanList(phaseModulators);
-            Toolkit.CleanList(ampModulators);
-        }
+			for (int i = 0; i < ampModulators.Count; ++i)
+			{
+				if (!ampModulators[i].Compare(other.ampModulators[i]))
+				{
+					return false;
+				}
+			}
+
+			for (int i = 0; i < phaseModulators.Count; ++i)
+			{
+				if (!phaseModulators[i].Compare(other.phaseModulators[i]))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		public void GetDependenciesRecursive(List<Modulator> list)
+		{
+			CleanLists();
+			//Debug.Log(name);
+			if (!list.Contains(this)) list.Add(this);
+
+			ampModulators.ForEach(a => a.GetDependenciesRecursive(list));
+			freqModulators.ForEach(a => a.GetDependenciesRecursive(list));
+			phaseModulators.ForEach(a => a.GetDependenciesRecursive(list));
+		}
+
+		private void CleanLists()
+		{
+			Toolkit.CleanList(freqModulators);
+			Toolkit.CleanList(phaseModulators);
+			Toolkit.CleanList(ampModulators);
+		}
     }
 }
