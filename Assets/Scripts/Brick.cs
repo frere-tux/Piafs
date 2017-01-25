@@ -10,7 +10,7 @@ namespace Piafs
         public Slot slot;
         public Modulator modulator;
         [Header("-- Level design --")]
-        private Slot librarySlot;
+        public Slot librarySlot;
         public Slot LibrarySlot { get { return librarySlot; } }
         public Slot rightSlot;
 
@@ -18,10 +18,22 @@ namespace Piafs
 
         void Awake()
         {
+
             col = GetComponent<Collider2D>();
-            librarySlot = slot;
+			slot.SetSlottedBrick(this);
+            if (librarySlot == null) librarySlot = slot;
             if (rightSlot == null || !rightSlot.valid) rightSlot = librarySlot;
-            Drop(slot);
+            if(librarySlot != slot)
+            {
+                slot.GrabOscillator();
+                Drop(librarySlot);
+            }
+        }
+
+        void OnValidate()
+        {
+            col = GetComponent<Collider2D>();
+            if (librarySlot == null) librarySlot = slot;
         }
 
         public void OnMouseDown()

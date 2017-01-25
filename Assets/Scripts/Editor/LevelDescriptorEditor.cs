@@ -75,7 +75,23 @@ namespace Piafs
 						}
 						else if(l is Brick)
 						{
-
+							Brick b = l as Brick;
+							GUILayout.BeginHorizontal();
+							GUILayout.Label(b.name);
+							for(int i = 0; i < levelDescriptor.levelSlots.Count; i++)
+							{
+								bool isInside = levelDescriptor.levelSlots[i] == b.slot;
+								GUI.color = isInside ? Color.yellow : Color.green;
+								if(GUILayout.Button(levelDescriptor.levelSlots[i].name))
+								{
+									Brick prev = levelDescriptor.levelSlots[i].SlottedBrick;
+									if(prev != null) prev.Drop(prev.LibrarySlot);
+									levelDescriptor.levelSlots[i].GrabOscillator();
+									if (!isInside)b.Drop(levelDescriptor.levelSlots[i]);
+								}			
+							}
+							GUI.color = Color.white;
+							GUILayout.EndHorizontal();
 						}
 					}
 				}

@@ -33,6 +33,8 @@ namespace Piafs
         public List<LevelControls> levelControls;
         [HideInInspector]
         public List<Trigger> levelTriggers;
+        [HideInInspector]
+        public List<Slot> levelSlots;
         private bool originalVersion = true;
         private float nextSongTime = -1f;
         private bool playingSong = false;
@@ -110,6 +112,8 @@ namespace Piafs
         {
             levelControls = GetComponentsInChildren<LevelControls>().ToList();
             levelTriggers = GetComponentsInChildren<Trigger>().ToList();
+            levelSlots.Clear();
+            GetComponentsInChildren<Slot>().ToList().ForEach(a => { if (a.valid) levelSlots.Add(a); });
         }
 
         public void Destroy()

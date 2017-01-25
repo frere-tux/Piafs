@@ -164,5 +164,10 @@ namespace Piafs
 			Toolkit.CleanList(phaseModulators);
 			Toolkit.CleanList(ampModulators);
 		}
-    }
+
+		public override string ToString()
+		{
+			return name + " :: " + base.ToString();
+		}
+	}
 }

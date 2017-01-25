@@ -107,7 +107,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &99781412
 Transform:
   m_ObjectHideFlags: 0
@@ -172,6 +172,7 @@ MonoBehaviour:
   levelControls: []
   levelTriggers:
   - {fileID: 858020735}
+  levelSlots: []
 --- !u!1001 &109078305
 Prefab:
   m_ObjectHideFlags: 0
@@ -221,6 +222,11 @@ Prefab:
       propertyPath: freqOutputs.Array.data[0]
       value: 
       objectReference: {fileID: 623293251}
+    - target: {fileID: 114926731057652688, guid: 7b92aec31bc01044ca752b0c12e3b1a3,
+        type: 2}
+      propertyPath: slottedBrick
+      value: 
+      objectReference: {fileID: 1184243141}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7b92aec31bc01044ca752b0c12e3b1a3, type: 2}
   m_IsPrefabParent: 0
@@ -257,7 +263,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &203666340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,6 +297,7 @@ MonoBehaviour:
   levelControls: []
   levelTriggers:
   - {fileID: 1634535296}
+  levelSlots: []
 --- !u!4 &203666341
 Transform:
   m_ObjectHideFlags: 0
@@ -375,6 +382,12 @@ Transform:
   m_PrefabParentObject: {fileID: 4504080335465460, guid: 2f413499ffe14874396a0dbfb11ffa25,
     type: 2}
   m_PrefabInternal: {fileID: 227182386}
+--- !u!114 &275655046 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114371658256795246, guid: 9e69a5133af58e34e80f02b5e7d48802,
+    type: 2}
+  m_PrefabInternal: {fileID: 1065889208}
+  m_Script: {fileID: 11500000, guid: ad3e7d78eb1ddcf41a9c84419565d2e9, type: 3}
 --- !u!1 &350138151
 GameObject:
   m_ObjectHideFlags: 0
@@ -727,7 +740,7 @@ GameObject:
   - component: {fileID: 623293251}
   - component: {fileID: 623293250}
   m_Layer: 0
-  m_Name: SinOscillator
+  m_Name: Output Sin Oscillator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -886,7 +899,7 @@ GameObject:
   - component: {fileID: 729549215}
   - component: {fileID: 729549216}
   m_Layer: 0
-  m_Name: SquareOscillator (1)
+  m_Name: Sine Modulator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1244,7 +1257,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1017780672}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f4cc7a86a8daa54ca6ef0d354bf0691, type: 3}
   m_Name: 
@@ -1313,6 +1326,36 @@ Prefab:
       propertyPath: rightSlot
       value: 
       objectReference: {fileID: 109078307}
+    - target: {fileID: 4281250031960736, guid: 9e69a5133af58e34e80f02b5e7d48802, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281250031960736, guid: 9e69a5133af58e34e80f02b5e7d48802, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.00000023841858
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281250031960736, guid: 9e69a5133af58e34e80f02b5e7d48802, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -0.100000024
+      objectReference: {fileID: 0}
+    - target: {fileID: 114775922738847938, guid: 9e69a5133af58e34e80f02b5e7d48802,
+        type: 2}
+      propertyPath: slot
+      value: 
+      objectReference: {fileID: 109078307}
+    - target: {fileID: 114775922738847938, guid: 9e69a5133af58e34e80f02b5e7d48802,
+        type: 2}
+      propertyPath: librarySlot
+      value: 
+      objectReference: {fileID: 275655046}
+    - target: {fileID: 1879469529808848, guid: 9e69a5133af58e34e80f02b5e7d48802, type: 2}
+      propertyPath: m_Name
+      value: SineBrick
+      objectReference: {fileID: 0}
+    - target: {fileID: 1482676601530304, guid: 9e69a5133af58e34e80f02b5e7d48802, type: 2}
+      propertyPath: m_Name
+      value: SineLibrarySlot
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9e69a5133af58e34e80f02b5e7d48802, type: 2}
   m_IsPrefabParent: 0
@@ -1337,7 +1380,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1112275245
 Transform:
   m_ObjectHideFlags: 0
@@ -1402,6 +1445,7 @@ MonoBehaviour:
   levelControls: []
   levelTriggers:
   - {fileID: 1937816452}
+  levelSlots: []
 --- !u!1 &1113974896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1543,7 +1587,7 @@ GameObject:
   - component: {fileID: 1224189339}
   - component: {fileID: 1224189340}
   m_Layer: 0
-  m_Name: SquareOscillator
+  m_Name: Square Modulator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2260,7 +2304,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1482676601530304, guid: 9e69a5133af58e34e80f02b5e7d48802, type: 2}
       propertyPath: m_Name
-      value: LibrarySlot (1)
+      value: SquareLibrarySlot
       objectReference: {fileID: 0}
     - target: {fileID: 114775922738847938, guid: 9e69a5133af58e34e80f02b5e7d48802,
         type: 2}
@@ -2284,6 +2328,22 @@ Prefab:
       value: 
       objectReference: {fileID: 21300000, guid: a3417cd619f30a7408ef11b0568d9c43,
         type: 3}
+    - target: {fileID: 4281250031960736, guid: 9e69a5133af58e34e80f02b5e7d48802, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281250031960736, guid: 9e69a5133af58e34e80f02b5e7d48802, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.00000023841858
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281250031960736, guid: 9e69a5133af58e34e80f02b5e7d48802, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -0.100000024
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879469529808848, guid: 9e69a5133af58e34e80f02b5e7d48802, type: 2}
+      propertyPath: m_Name
+      value: SquareBrick
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
     - {fileID: 0}
@@ -2326,12 +2386,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   freq: 1
-  amp: 1
+  amp: 0.5
   freqModulators: []
   phaseModulators: []
   ampModulators: []
   modulators:
-  - {fileID: 1972222358}
+  - {fileID: 623293251}
 --- !u!114 &1669976627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2509,7 +2569,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1675515119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2546,6 +2606,8 @@ MonoBehaviour:
   - {fileID: 194470164}
   levelTriggers:
   - {fileID: 1717735021}
+  levelSlots:
+  - {fileID: 109078307}
 --- !u!4 &1675515120
 Transform:
   m_ObjectHideFlags: 0

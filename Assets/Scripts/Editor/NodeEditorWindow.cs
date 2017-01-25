@@ -240,11 +240,12 @@ namespace Piafs
 			}
 
 			//enable drag for node
-			if (!_handleActive)
+			if (!_handleActive && Event.current.type == EventType.mouseDown)
 			{
 				Selection.activeGameObject = _nodeWindows[id].modulator.gameObject;
-				GUI.DragWindow();
+				
 			}
+			GUI.DragWindow();
 		}
 
 		private void ResizeNode(int id, float deltaX, float deltaY)

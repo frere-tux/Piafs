@@ -12,6 +12,7 @@ namespace Piafs
 
         public bool valid;
 
+		[SerializeField]
         private Brick slottedBrick;
         public Brick SlottedBrick
         {
@@ -20,6 +21,7 @@ namespace Piafs
 
         public void DropBrick(Brick _brick)
         {
+			Debug.Log("drop brick");
             slottedBrick = _brick;
             Modulator dropped = slottedBrick.modulator;
 
@@ -31,6 +33,11 @@ namespace Piafs
             foreach (Modulator m in freqOutputs) m.freqModulators.Add(dropped);
             foreach (Modulator m in phaseOutputs) m.phaseModulators.Add(dropped);
         }
+
+		public void SetSlottedBrick(Brick _brick)
+		{
+			slottedBrick = _brick;
+		}
 
         public void GrabOscillator()
         {
@@ -46,6 +53,7 @@ namespace Piafs
                 foreach (Modulator m in freqOutputs) m.freqModulators.Remove(dropped);
                 foreach (Modulator m in phaseOutputs) m.phaseModulators.Remove(dropped);
 
+				slottedBrick.slot = slottedBrick.librarySlot;
                 slottedBrick = null;
             }
         }
@@ -69,6 +77,11 @@ namespace Piafs
             freqOutputs.ForEach(a => a.GetDependenciesRecursive(result));
             phaseOutputs.ForEach(a => a.GetDependenciesRecursive(result));
         }
-    }
+
+		public override string ToString()
+		{
+			return name;
+		}
+	}
 
 }
