@@ -17,13 +17,66 @@ namespace Piafs
 			public float maxY;
 			public Color color;
 
-			public Node(Rect r, Modulator m, Color c)
+            private Texture2D line;
+
+            public Node(Rect r, Modulator m, Color c, Texture2D aaLine)
 			{
 				modulator = m;
 				rect = r;
 				color = c;
+                line = aaLine;
 			}
-		}
+
+            public void Draw()
+            {
+                foreach (Modulator m in modulator.ampModulators)
+                {
+                    Node node = window.GetNodeFromModulator(m);
+                    if (node != null)
+                        DrawCurve(node.rect, 0);
+                }
+                foreach (Modulator m in modulator.freqModulators)
+                {
+                    Node node = window.GetNodeFromModulator(m);
+                    if (node != null)
+                        DrawCurve(node.rect, 1);
+                }
+                foreach (Modulator m in modulator.phaseModulators)
+                {
+                    Node node = window.GetNodeFromModulator(m);
+                    if (node != null)
+                        DrawCurve(node.rect, 2);
+                }
+            }
+
+            void DrawCurve(Rect end, int type)
+            {
+                float startCurveHeight = (rect.height / 7) * (3 + type);
+                Vector3 startPos = new Vector3(rect.x + rect.width, rect.y + startCurveHeight, 0)/* + (Vector3)_scrollPos*/;
+                Vector3 endPos = new Vector3(end.x, end.y + end.height / 2, 0)/* + (Vector3)_scrollPos*/;
+                Vector3 startTan = startPos + Vector3.right * 50;
+                Vector3 endTan = endPos + Vector3.left * 50;
+
+                Color color;
+                switch (type)
+                {
+                    case 0:
+                        color = new Color(0.0f, 0.8f, 0.2f);
+                        break;
+                    case 1:
+                        color = new Color(0.0f, 0.5f, 0.5f);
+                        break;
+                    case 2:
+                        color = new Color(0.0f, 0.2f, 0.8f);
+                        break;
+                    default:
+                        color = Color.red;
+                        break;
+                }
+
+                Handles.DrawBezier(startPos, endPos, startTan, endTan, color, line, 1.5f);
+            }
+        }
 
 		static NodeEditorWindow window;
 
@@ -62,7 +115,10 @@ namespace Piafs
 				this._levelDescriptor = _levelDescriptor;
 				_nodeFinder.Clear();
 				_nodeWindows.Clear();
-				if(_levelDescriptor != null)BuildNodeTree();
+                if (_levelDescriptor != null)
+                {
+                    BuildNodeTree();
+                }
 			}
 		}
 
@@ -80,7 +136,7 @@ namespace Piafs
 		{
 			if (!_nodeFinder.ContainsKey(modulator))
 			{
-				_nodeWindows.Add(new Node(new Rect(pos.x, pos.y, _winMinX, _winMinY), modulator,Color.white));
+				_nodeWindows.Add(new Node(new Rect(pos.x, pos.y, _winMinX, _winMinY), modulator,Color.white, _aaLine));
 				_nodeFinder.Add(modulator,_nodeWindows[_nodeWindows.Count-1]);
 			}
 			_nodeWindows[_nodeWindows.Count - 1].maxY = maxY;
@@ -140,18 +196,7 @@ namespace Piafs
 
 			for (int i = 0; i < _nodeWindows.Count; i++)
 			{
-				foreach(Modulator m in _nodeWindows[i].modulator.ampModulators)
-				{
-					DrawNodeCurve(_nodeWindows[i].rect, _nodeFinder[m].rect);
-				}
-				foreach (Modulator m in _nodeWindows[i].modulator.freqModulators)
-				{
-					DrawNodeCurve(_nodeWindows[i].rect, _nodeFinder[m].rect);
-				}
-				foreach (Modulator m in _nodeWindows[i].modulator.phaseModulators)
-				{
-					DrawNodeCurve(_nodeWindows[i].rect, _nodeFinder[m].rect);
-				}
+                _nodeWindows[i].Draw();
 			}	
 
 			GUILayout.BeginHorizontal(EditorStyles.toolbar);
@@ -254,16 +299,19 @@ namespace Piafs
 			if ((r.width + deltaX) > _winMinX) { r.xMax += deltaX; }
 			if ((r.height + deltaY) > _winMinY) {r.yMax += deltaY; }
 			_nodeWindows[id].rect = r;
-		}
 
-		void DrawNodeCurve(Rect start, Rect end)
-		{
-			Vector3 startPos = new Vector3(start.x + start.width, start.y + start.height / 2, 0) + (Vector3)_scrollPos;
-			Vector3 endPos = new Vector3(end.x, end.y + end.height / 2, 0) + (Vector3)_scrollPos;
-			Vector3 startTan = startPos + Vector3.right * 50;
-			Vector3 endTan = endPos + Vector3.left * 50;
-			Handles.DrawBezier(startPos, endPos, startTan, endTan, Color.black, _aaLine, 1.5f);
-		}
+            _nodeWindows[id].Draw();
+        }
+
+        Node GetNodeFromModulator(Modulator modulator)
+        {
+            if (_nodeFinder.ContainsKey(modulator))
+            {
+                return _nodeFinder[modulator];
+            }
+
+            return null;
+        }
 	}
 
 }
