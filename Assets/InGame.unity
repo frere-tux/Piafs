@@ -257,7 +257,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &203666340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,7 +498,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1972222357}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &395443002
 MonoBehaviour:
@@ -707,7 +707,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1972222357}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &616417288 stripped
 MonoBehaviour:
@@ -1337,7 +1337,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1112275245
 Transform:
   m_ObjectHideFlags: 0
@@ -1693,7 +1693,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   freq: 1
-  amp: 1
+  amp: 2
   freqModulators: []
   phaseModulators: []
   ampModulators:
@@ -2326,12 +2326,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   freq: 1
-  amp: 0.5
+  amp: 1
   freqModulators: []
   phaseModulators: []
   ampModulators: []
   modulators:
-  - {fileID: 1966591568}
+  - {fileID: 1972222358}
 --- !u!114 &1669976627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2470,7 +2470,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1982692821}
   m_Father: {fileID: 1972222357}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2508,7 +2509,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1675515119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3409,10 +3410,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1672660673}
-  - {fileID: 395443001}
-  - {fileID: 1982692821}
-  - {fileID: 1719540473}
   - {fileID: 524415053}
+  - {fileID: 395443001}
+  - {fileID: 1719540473}
   m_Father: {fileID: 1887684406}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3466,8 +3466,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1972222357}
-  m_RootOrder: 2
+  m_Father: {fileID: 1672660673}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1982692822
 MonoBehaviour:
