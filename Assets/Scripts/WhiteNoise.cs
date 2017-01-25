@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Piafs
 {
+    [ExecuteInEditMode]
     [AddComponentMenu("Modulator/White noise", -80)]
     public class WhiteNoise : Modulator
     {

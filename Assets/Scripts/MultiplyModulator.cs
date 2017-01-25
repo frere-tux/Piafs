@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Piafs
 {
+    [ExecuteInEditMode]
     public class MultiplyModulator : Modulator
     {
         public override float GetValue()

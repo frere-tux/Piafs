@@ -87,7 +87,7 @@ namespace Piafs
         {
             return base.GetPropertyHeight(property, label) * 12f;
         }
-    } 
+    }
 }
 
 

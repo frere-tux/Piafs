@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Piafs
 {
+    [ExecuteInEditMode]
     public class Trigger : MonoBehaviour
     {
         public List<Modulator> envelopes;
@@ -15,6 +16,10 @@ namespace Piafs
         public System.Action<Trigger,bool> onEndTrigger;
         public System.Action onStartTrigger;
         private bool triggered;
+        public bool Triggered
+        {
+            get { return triggered; }
+        }
         private SpriteRenderer spriteRenderer;
 
         void Awake()
@@ -24,26 +29,35 @@ namespace Piafs
 
         void OnMouseDown()
         {
+            Activate();
+        }
+
+        public void Activate()
+        {
             triggered = true;
             foreach (Modulator e in envelopes)
             {
-                e.Trigger();
+                if(e!=null)e.Trigger();
             }
             triggerTime = Time.time;
             if (onStartTrigger != null) onStartTrigger();
             spriteRenderer.sprite = sprites[1];
-            
+        }
+
+        public void Deactivate()
+        {
+            triggered = false;
+            envelopes.ForEach(e => { if (e != null) e.Untrigger(); });
+            triggerTime = Time.time - triggerDuration;
+            if (onEndTrigger != null) onEndTrigger(this, triggerTime > minTriggerTime);
+            spriteRenderer.sprite = sprites[0];
         }
 
         void Update()
         {
             if(Input.GetMouseButtonUp(0) && triggered)
             {
-                triggered = false;
-                envelopes.ForEach(e=>e.Untrigger());
-                triggerTime = Time.time - triggerDuration;
-                if (onEndTrigger != null) onEndTrigger(this, triggerTime > minTriggerTime);
-                spriteRenderer.sprite = sprites[0];
+                Deactivate();
             }
         }
     }

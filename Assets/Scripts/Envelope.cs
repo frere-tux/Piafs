@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Piafs
 {
+    [ExecuteInEditMode]
     [AddComponentMenu("Modulator/Envelope", -80)]
     public class Envelope : Modulator
     {
@@ -56,9 +57,9 @@ namespace Piafs
         private float releaseStrength = 0f;
         private float currentValue = 0f;
 
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
             sampleRate = AudioSettings.outputSampleRate;
             Debug.Log(gameObject.name);
             

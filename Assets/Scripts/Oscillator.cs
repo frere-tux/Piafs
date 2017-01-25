@@ -16,9 +16,9 @@ namespace Piafs
         private float smoothingSpeed = 1.0f;
         private float value = 0.0f;
 
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
             smoothFreq = freq;
             sampleTime = 1.0f / AudioSettings.outputSampleRate;
         }

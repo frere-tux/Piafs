@@ -9,10 +9,8 @@ namespace Piafs
         public LevelDescriptor[] levels;
         public int currentLevel = 0;
 
-        [SerializeField]
-        private AnimBird birdAnim;
-        [SerializeField]
-        private AnimBirdCarton cartonAnim;
+		public AnimBird birdAnim;
+		public AnimBirdCarton cartonAnim;
         public Mixer birdMixer, playerMixer;
         public GameObject interfaceParent;
         public Camera camera;

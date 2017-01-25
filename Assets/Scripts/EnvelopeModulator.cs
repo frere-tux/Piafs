@@ -6,13 +6,18 @@ using UnityEngine;
 
 namespace Piafs
 {
+    [ExecuteInEditMode]
     [AddComponentMenu("Modulator/EnvelopeModulator", -80)]
     public class EnvelopeModulator : Modulator
     {
         [System.Serializable]
         public class EnvelopeCurve
         {
-            public AnimationCurve curve = AnimationCurve.Linear(0f,0f,0f,0f);
+			public AnimationCurve curve = new AnimationCurve(
+				new Keyframe(0f, 0f, 0f, 0f),
+				new Keyframe(1f, 1f, 0f, 0f),
+				new Keyframe(2f, 0f, 0f, 0f)
+				);
             public int attackPoint;
             public int releasePoint;
             public bool loop;
@@ -39,7 +44,7 @@ namespace Piafs
         }
 
         public EnvelopeCurve env;
-        public bool debugEnvelope;
+        public bool debugEnvelope = true;
 
         private int sampleTime;
         private float time;
@@ -49,9 +54,9 @@ namespace Piafs
         private float releaseStrength = 0f;
         private float currentValue = 0f;
 
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
             sampleRate = AudioSettings.outputSampleRate;
 
         }
@@ -98,7 +103,9 @@ namespace Piafs
             }
             else
             {
-                currentValue = releaseStrength * env.curve.Evaluate(time) / env.GetReleaseAmp();
+				float releaseAmp = env.GetReleaseAmp();
+				if (releaseAmp == 0f) releaseAmp = 1f;
+                currentValue = releaseStrength * env.curve.Evaluate(time) / releaseAmp;
                 return currentValue * GetModulatedAmp();
             }
         }

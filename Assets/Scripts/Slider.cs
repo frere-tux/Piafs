@@ -23,6 +23,10 @@ namespace Piafs
         private float yDragStart;
         private Vector3 movingPartOrigin;
         private float steppedValue;
+		public float SteppedValue
+		{
+			get { return steppedValue; }
+		}
         private float smoothedValue;
 
         void Start()
@@ -63,6 +67,19 @@ namespace Piafs
             RefreshFixedModulator();
             RefreshSteppedValue();
         }
+
+        public void SetValueHard(float v)
+        {
+			v = Mathf.Clamp(v,min, max);
+			steppedValue = v - min;
+			sliderValue = steppedValue / (max - min);
+			RefreshSteppedValue();
+			sliderValue = steppedValue / (max - min);
+			smoothedValue = sliderValue;
+			//RefreshVisual();
+			RefreshFixedModulator();
+			fixedModulator.JumpToRawValue();
+		}
 
         public void RefreshSteppedValue()
         {

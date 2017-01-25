@@ -7,15 +7,20 @@ namespace Piafs
 {
     public class LevelDescriptor : MonoBehaviour
     {
-        public Mixer birdMixer , playerMixer;
-        [SerializeField]
-        private AnimBird birdAnim;
-        [SerializeField]
-        private AnimBirdCarton cartonAnim;
+        public Modulator outputModulator;
         public float songIntervalMin, songIntervalMax;
         public float answerIntervalMin, answerIntervalMax;
-        [SerializeField]
-        private SequenceElement[] birdSong;
+        public SequenceElement[] birdSong;
+
+        [HideInInspector]
+        public LevelManager levelManager;
+        [HideInInspector]
+        public Mixer birdMixer, playerMixer;
+        [HideInInspector]
+        public AnimBird birdAnim;
+        [HideInInspector]
+        public AnimBirdCarton cartonAnim;
+
         [Header("Debug")]
         public bool debugLevel;
         public bool doNotGenerateBird;
@@ -24,7 +29,10 @@ namespace Piafs
         public System.Action onLevelSolve;
 
         private List<Trigger> lastPlayerTriggers = new List<Trigger>();
-        private List<LevelControls> levelControls;
+        [HideInInspector]
+        public List<LevelControls> levelControls;
+        [HideInInspector]
+        public List<Trigger> levelTriggers;
         private bool originalVersion = true;
         private float nextSongTime = -1f;
         private bool playingSong = false;
@@ -33,13 +41,32 @@ namespace Piafs
 
 
         [System.Serializable]
-        private struct SequenceElement
+        public struct SequenceElement
         {
             public float duration;
             public float randomization;
             public float pause;
             public float pauseRandomization;
             public Trigger pattern;
+        }
+
+        void OnValidate()
+        {
+            
+            if (transform.parent == null)
+            {
+                levelManager = null;
+            }
+            else
+            {
+                levelManager = transform.parent.gameObject.GetComponent<LevelManager>();
+            }
+            if (levelManager == null) throw new System.Exception(string.Format("You have to put level {0} in a level manager !", name));
+            if (outputModulator == null) throw new System.Exception("No output is assigned for this level !");
+            birdAnim = levelManager.birdAnim;
+            cartonAnim = levelManager.cartonAnim;
+            birdMixer = levelManager.birdMixer;
+            playerMixer = levelManager.playerMixer;
         }
 
         void Start()
@@ -61,16 +88,10 @@ namespace Piafs
             {
                 playerMixer.modulators.Clear();
                 OutputFlag flag = GetComponentInChildren<OutputFlag>();
-                if (flag == null)
-                {
-                    Debug.LogError("ERROR : NO OUTPUT FLAG IN LEVEL");
-                    return;
-                }
-                else
-                {
-                    cartonAnim.modulator = flag.gameObject.GetComponent<Modulator>();
-                    playerMixer.modulators.Add(GetComponentInChildren<OutputFlag>().gameObject.GetComponent<Modulator>());
-                }
+
+                cartonAnim.modulator = outputModulator;
+                playerMixer.modulators.Add(outputModulator);
+
                 levelControls = GetComponentsInChildren<LevelControls>().ToList();
                 if(!doNotGenerateBird) InstantiateBirdVersion();
                 foreach(SequenceElement seq in birdSong)
@@ -83,6 +104,12 @@ namespace Piafs
             {
                 playSong = StartCoroutine(PlaySong(1f));
             }
+        }
+
+        public void RegisterLevelElements()
+        {
+            levelControls = GetComponentsInChildren<LevelControls>().ToList();
+            levelTriggers = GetComponentsInChildren<Trigger>().ToList();
         }
 
         public void Destroy()
@@ -203,31 +230,17 @@ namespace Piafs
             {
                 s.SolveValue();
             }
-            OutputFlag outputFlag = birdCopy.GetComponentInChildren<OutputFlag>();
-            if(outputFlag != null)
-            {
-                birdMixer.modulators.Add(outputFlag.gameObject.GetComponent<Modulator>());
-                birdAnim.modulator = outputFlag.gameObject.GetComponent<Modulator>();
-                
-            }
-            else
-            {
-                Debug.LogError("No output flag on level");
-            }
+
+            birdMixer.modulators.Add(sibling.outputModulator);
+            birdAnim.modulator = sibling.outputModulator;
+
             sibling.Init(birdAnim, cartonAnim, birdMixer, playerMixer);
         }
 
         private List<Modulator> GetUsedModulators()
         {
-            OutputFlag flag = GetComponentInChildren<OutputFlag>();
-            if(!flag)
-            {
-                Debug.LogError("no output flag");
-                return null;
-            }
-
             List<Modulator> result = new List<Modulator>();
-            flag.GetComponent<Modulator>().GetDependenciesRecursive(result);
+            outputModulator.GetDependenciesRecursive(result);
             Slot[] slots = GetComponentsInChildren<Slot>();
             Brick[] bricks = GetComponentsInChildren<Brick>();
             foreach(Slot s in slots)

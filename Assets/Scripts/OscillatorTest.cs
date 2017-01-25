@@ -3,6 +3,7 @@ using System.Collections;
 
 namespace Piafs
 {
+    [ExecuteInEditMode]
     [RequireComponent(typeof(AudioSource))]
     public class OscillatorTest : MonoBehaviour
     {
@@ -15,6 +16,11 @@ namespace Piafs
 
         private float[] debugBuffer = new float[0];
         private int channelCount = 0;
+
+        void OnEnable()
+        {
+            GetComponent<AudioSource>().Play();
+        }
 
         void Update()
         {

@@ -19,9 +19,18 @@ namespace Piafs
 		public abstract float GetValue();
 		public abstract float GetPositiveValue();
 
-		protected virtual void Start()
+		protected virtual void Awake()
 		{
 			CleanLists();
+		}
+
+		protected virtual void OnValidate()
+		{
+			Awake();
+			if(float.IsNaN(phase))
+			{
+				phase = 0f;
+			}
 		}
 
 		public virtual float GetLastPositiveValue()
@@ -65,7 +74,9 @@ namespace Piafs
 
 		public float GetModulatedAmp(bool lastValue = false)
 		{
+			if (ampModulators == null) return amp;
 			float modulatedAmp = amp;
+			
 
 			if (lastValue)
 			{

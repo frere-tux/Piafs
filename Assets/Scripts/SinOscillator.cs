@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Piafs
 {
+    [ExecuteInEditMode]
     [AddComponentMenu("Oscillator/Sin Oscillator", -80)]
     public class SinOscillator : Oscillator
     {
@@ -13,5 +14,5 @@ namespace Piafs
         {
             return Mathf.Sin(GetModulatedPhase() * 2.0f * 3.1415926f);
         }
-	}
+    }
 }

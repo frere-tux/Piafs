@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Piafs
 {
+    [ExecuteInEditMode]
     [System.Serializable]
     [AddComponentMenu("Oscillator/Square Oscillator", -80)]
     public class SquareOscillator : Oscillator

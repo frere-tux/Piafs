@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Piafs
 {
+    [ExecuteInEditMode]
     [AddComponentMenu("Modulator/Mixer", -80)]
     public class Mixer : Modulator
     {
@@ -16,7 +17,7 @@ namespace Piafs
             float mixedValue = 0.0f;
             foreach (Modulator oscillator in modulators)
             {
-                mixedValue += oscillator.GetValue();
+                if(oscillator != null)mixedValue += oscillator.GetValue();
             }
 
             return mixedValue * GetModulatedAmp();

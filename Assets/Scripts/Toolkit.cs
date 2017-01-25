@@ -4,15 +4,15 @@ using UnityEngine;
 
 public static class Toolkit {
 
-	public static float VoltToDb(float volume, float referenceVolume)
-	{
-		return 20f * Mathf.Log10(volume / referenceVolume);
-	}
+    public static float VoltToDb(float volume, float referenceVolume)
+    {
+        return 20f * Mathf.Log10(volume / referenceVolume);
+    }
 
-	public static float DbToVolt(float decibels)
-	{
-		return Mathf.Pow(10f, decibels / 20f);
-	}
+    public static float DbToVolt(float decibels)
+    {
+        return Mathf.Pow(10f, decibels / 20f);
+    }
 
     public static void DrawCurve(float[] data, int channelCount, float scale, float yOffset)
     {
@@ -61,12 +61,15 @@ public static class Toolkit {
 
     public static void CleanList<T>(List<T> list)
     {
-        for(int i = 0; i < list.Count; i++)
+        if(list != null)
         {
-            if (list[i] == null)
+            for (int i = 0; i < list.Count; i++)
             {
-                list.RemoveAt(i);
-                i--;
+                if (list[i] == null)
+                {
+                    list.RemoveAt(i);
+                    i--;
+                }
             }
         }
     }

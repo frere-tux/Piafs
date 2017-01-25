@@ -42,7 +42,6 @@ namespace Piafs
 			}
 			else
 			{
-				
 				if (GUILayout.Button("Sine", GUILayout.MaxWidth(200f)))
 				{
 					selectNewModulator = false;
@@ -105,11 +104,25 @@ namespace Piafs
 			base.OnInspectorGUI();
 		}
 
-		public Modulator NewModulator<T>() where T : Modulator
+		private string NewObjPrefix()
+		{
+			switch(modulatorImpact)
+			{
+				case 0:
+					return "Freq";
+				case 1:
+					return "Amp";
+				case 2:
+					return "Phase";
+			}
+			return "";
+		}
+
+		private Modulator NewModulator<T>() where T : Modulator
 		{
 			GameObject g = new GameObject();
 			T nuMod = g.AddComponent<T>();
-			g.name = nuMod.GetType().Name;
+			g.name = nuMod.GetType().Name + " --> " + NewObjPrefix();
 			g.transform.parent = mod.gameObject.transform;
 			Selection.activeGameObject = g;
 			return nuMod;
