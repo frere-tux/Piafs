@@ -11,6 +11,9 @@ namespace Piafs
         public float songIntervalMin, songIntervalMax;
         public float answerIntervalMin, answerIntervalMax;
         public SequenceElement[] birdSong;
+        [Header("Prefabs for helpers")]
+        public GameObject librarySlotPrefab;
+		public GameObject plugSlotPrefab;
 
         [HideInInspector]
         public LevelManager levelManager;
@@ -118,6 +121,7 @@ namespace Piafs
 
         public void Destroy()
         {
+			Debug.Log("Destroy level");
             Destroy(sibling.gameObject);
             Destroy(gameObject);
         }
@@ -183,7 +187,16 @@ namespace Piafs
 
         private bool CheckVictory()
         {
-            bool levelControlsOk = levelControls.TrueForAll(control => control.IsSolved());
+            bool levelControlsOk = levelControls.TrueForAll(control => 
+            {
+                bool b = control.IsSolved();
+				if (!b)
+				{
+					Debug.Log(control);
+					b = control.IsSolved();
+				}
+                return b;
+            });
             bool triggersOk = true;
             if(lastPlayerTriggers.Count == birdSong.Length)
             {

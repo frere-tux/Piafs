@@ -9,6 +9,7 @@ namespace Piafs
         [Header("-- Runtime --")]
         public float sliderValue;
         public FixedModulator fixedModulator;
+        public List<FixedModulator> fixedModulators;
         [Header("-- Interface --")]
         public GameObject movingPart;
         public float fullDragWorldDistance;
@@ -23,23 +24,30 @@ namespace Piafs
         private float yDragStart;
         private Vector3 movingPartOrigin;
         private float steppedValue;
-		public float SteppedValue
-		{
-			get { return steppedValue; }
-		}
+        private int stepValue;
+        public float SteppedValue
+        {
+            get { return steppedValue; }
+        }
         private float smoothedValue;
 
         void Start()
         {
             col = GetComponent<Collider2D>();
             movingPartOrigin = movingPart.transform.localPosition;
-            if(fixedModulator != null)fixedModulator.SetSmoothing(sliderSmoothing,(max-min)* sliderSmoothThreshold);
+            if (fixedModulators != null)
+            {
+                foreach(FixedModulator f in fixedModulators)
+                {
+                    f.SetSmoothing(sliderSmoothing, (max - min) * sliderSmoothThreshold);
+                }
+            }
             Refresh();
         }
 
         void Update()
         {
-            sliderValue = Toolkit.Damp(sliderValue,steppedValue / (max- min),1f,Time.deltaTime);
+            sliderValue = steppedValue / (max- min);
             //if (Mathf.Abs(sliderValue - steppedValue / (max - min)) > 0.05f) sliderValue = steppedValue / (max - min) + 0.05f * Mathf.Sign(sliderValue - steppedValue);
             smoothedValue = Toolkit.Damp(smoothedValue, sliderValue, 0.99999f,Time.deltaTime);
             if (Mathf.Abs(smoothedValue - sliderValue) < sliderSmoothThreshold) smoothedValue = sliderValue;
@@ -70,19 +78,20 @@ namespace Piafs
 
         public void SetValueHard(float v)
         {
-			v = Mathf.Clamp(v,min, max);
-			steppedValue = v - min;
-			sliderValue = steppedValue / (max - min);
-			RefreshSteppedValue();
-			sliderValue = steppedValue / (max - min);
-			smoothedValue = sliderValue;
-			//RefreshVisual();
-			RefreshFixedModulator();
-			fixedModulator.JumpToRawValue();
-		}
+            v = Mathf.Clamp(v,min, max);
+            steppedValue = v - min;
+            sliderValue = steppedValue / (max - min);
+            RefreshSteppedValue();
+            sliderValue = steppedValue / (max - min);
+            smoothedValue = sliderValue;
+            //RefreshVisual();
+            RefreshFixedModulator();
+            fixedModulators.ForEach(a => a.JumpToRawValue());
+        }
 
         public void RefreshSteppedValue()
         {
+            stepValue = Mathf.RoundToInt(sliderValue * (max - min) / step);
             steppedValue = Mathf.Round(sliderValue * (max - min) / step) * step;
         }
 
@@ -93,7 +102,7 @@ namespace Piafs
 
         public void RefreshFixedModulator()
         {
-            if(fixedModulator != null)fixedModulator.SetValueSmooth(Mathf.Lerp(min, max, smoothedValue));
+            if(fixedModulators != null)fixedModulators.ForEach(a => a.SetValueSmooth(Mathf.Lerp(min, max, smoothedValue)));
         }
 
         public void SolveValue()
@@ -101,11 +110,13 @@ namespace Piafs
             steppedValue = rightValue - min;
             sliderValue = steppedValue / (max - min);
             smoothedValue = sliderValue;
+            RefreshSteppedValue();
         }
 
         public override bool IsSolved()
         {
-            return steppedValue+min == rightValue;
+            bool result = stepValue  == Mathf.Round((rightValue - min) / step);
+            return result;
         }
     }
 }

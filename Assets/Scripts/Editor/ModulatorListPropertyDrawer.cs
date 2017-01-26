@@ -16,7 +16,11 @@ namespace Piafs
 		{
 			mod = (Modulator)target;
 			GUILayout.BeginVertical();
-			if(selectNewModulator == false)
+			if (GUILayout.Button("--> Put into gameplay brick", GUILayout.MaxWidth(200f)))
+			{
+				PutIntoGameplayBrick(mod);
+			}
+			if (selectNewModulator == false)
 			{
 				if (GUILayout.Button("Add freq modulator", GUILayout.MaxWidth(200f)))
 				{
@@ -137,6 +141,57 @@ namespace Piafs
 				case 2: return mod.phaseModulators;
 			}
 			return null;
+		}
+
+		public void PutIntoGameplayBrick(Modulator thisModulator)
+		{
+			GameObject g = thisModulator.gameObject;
+			while(g.GetComponent<LevelDescriptor>() == null)
+			{
+				if(g.transform.parent != null)
+				{
+					g = g.transform.parent.gameObject;
+				}
+				else
+				{
+					throw new System.Exception("This modulator doesn't belong to a level !");
+				}
+			}
+			Modulator[] allMods = g.GetComponentsInChildren<Modulator>();
+			List<Modulator> ampModulated = new List<Modulator>();
+			List<Modulator> freqModulated = new List<Modulator>();
+			List<Modulator> phaseModulated = new List<Modulator>();
+			foreach(Modulator m in allMods)
+			{
+				if(m.ampModulators.Contains(thisModulator))
+				{
+					ampModulated.Add(m);
+				}
+				if (m.freqModulators.Contains(thisModulator))
+				{
+					freqModulated.Add(m);
+				}
+				if (m.phaseModulators.Contains(thisModulator))
+				{
+					phaseModulated.Add(m);
+				}
+			}
+			GameObject librarySlot = Instantiate(g.GetComponent<LevelDescriptor>().librarySlotPrefab);
+			Brick newBrick = librarySlot.GetComponentInChildren<Brick>();
+			Slot newPlugSlot = Instantiate(g.GetComponent<LevelDescriptor>().plugSlotPrefab).GetComponentInChildren<Slot>();
+			newBrick.modulator = thisModulator;
+			newBrick.name = "Brick :"+ thisModulator.name;
+			newBrick.rightSlot = newPlugSlot;
+			newBrick.librarySlot = librarySlot.GetComponent<Slot>();
+			//newBrick.Drop(newBrick.librarySlot);
+			
+			newPlugSlot.ampModulators = thisModulator.ampModulators;
+			newPlugSlot.ampModulators = thisModulator.freqModulators;
+			newPlugSlot.ampModulators = thisModulator.phaseModulators;
+			newPlugSlot.ampOutputs = ampModulated;
+			newPlugSlot.freqOutputs = freqModulated;
+			newPlugSlot.phaseOutputs = phaseModulated;
+
 		}
 	}
 

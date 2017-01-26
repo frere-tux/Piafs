@@ -74,6 +74,7 @@ namespace Piafs
 
             float freq = modulator.GetModulatedFreq();
             freq = Mathf.Log(freq / 20.0f, 2.0f) * 4.0f;
+            if (float.IsNaN(freq)) freq = 0f;
             freq = (freq * 2.0f) - 1.0f;
             freq *= Mathf.Pow(amp, 0.5f);
 

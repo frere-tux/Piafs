@@ -15,12 +15,13 @@ namespace Piafs
         public Slot rightSlot;
 
         Collider2D col;
+        private Vector3 rawPosition;
 
         void Awake()
         {
 
             col = GetComponent<Collider2D>();
-			slot.SetSlottedBrick(this);
+            slot.SetSlottedBrick(this);
             if (librarySlot == null) librarySlot = slot;
             if (rightSlot == null || !rightSlot.valid) rightSlot = librarySlot;
             if(librarySlot != slot)
@@ -33,7 +34,13 @@ namespace Piafs
         void OnValidate()
         {
             col = GetComponent<Collider2D>();
+            slot.SetSlottedBrick(this);
             if (librarySlot == null) librarySlot = slot;
+        }
+
+        void Update()
+        {
+            transform.localPosition = Toolkit.Damp(transform.localPosition, rawPosition, 0.99f,Time.deltaTime);
         }
 
         public void OnMouseDown()
@@ -66,8 +73,17 @@ namespace Piafs
         {
             Vector3 originPos = _slot.transform.position;
             originPos.z = this.transform.position.z;
+			Vector3 posSnapshot = transform.position; ;
             transform.position = originPos;
+			rawPosition = transform.localPosition;
+			if (_slot == librarySlot) transform.position = posSnapshot;
         }
+
+		public void SetPositionHard(Vector3 _pos)
+		{
+			transform.position = _pos;
+			rawPosition = transform.localPosition;
+		}
 
         public override bool IsSolved()
         {

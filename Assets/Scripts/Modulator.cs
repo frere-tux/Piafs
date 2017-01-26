@@ -12,9 +12,9 @@ namespace Piafs
 		public float amp = 1.0f;
 		protected float phase = 0.0f;
 
-		public List<Modulator> freqModulators;
-		public List<Modulator> phaseModulators;
-		public List<Modulator> ampModulators;
+		public List<Modulator> freqModulators = new List<Modulator>();
+		public List<Modulator> phaseModulators = new List<Modulator>();
+		public List<Modulator> ampModulators = new List<Modulator>();
 
 		public abstract float GetValue();
 		public abstract float GetPositiveValue();
@@ -50,8 +50,8 @@ namespace Piafs
 
 		public float GetModulatedFreq()
 		{
+			if (freqModulators == null) return freq;
 			float modulatedFreq = freq;
-
 			foreach (Modulator freqModulator in freqModulators)
 			{
 				if (freqModulator != null) modulatedFreq += freqModulator.GetValue();
@@ -92,9 +92,6 @@ namespace Piafs
 					modulatedAmp += ampModulator.GetPositiveValue();
 				}
 			}
-
-
-
 			return modulatedAmp;
 		}
 
@@ -169,5 +166,7 @@ namespace Piafs
 		{
 			return name + " :: " + base.ToString();
 		}
+
+
 	}
 }

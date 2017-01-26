@@ -62,9 +62,11 @@ namespace Piafs
         {
             if(draggedBrick != null)
             {
+				
                 Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mouseWorldPos.z = brickZ - 0.1f;
-                draggedBrick.transform.position = mouseWorldPos;
+				mouseWorldPos.y = Mathf.Max(draggedBrick.librarySlot.transform.position.y - 0.1f, mouseWorldPos.y);
+                draggedBrick.SetPositionHard(mouseWorldPos);
 
                 if (Input.GetMouseButtonUp(0))
                 {

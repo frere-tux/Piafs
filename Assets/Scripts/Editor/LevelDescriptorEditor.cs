@@ -86,6 +86,7 @@ namespace Piafs
 								{
 									Brick prev = levelDescriptor.levelSlots[i].SlottedBrick;
 									if(prev != null) prev.Drop(prev.LibrarySlot);
+									b.slot.GrabOscillator();
 									levelDescriptor.levelSlots[i].GrabOscillator();
 									if (!isInside)b.Drop(levelDescriptor.levelSlots[i]);
 								}			

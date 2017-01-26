@@ -10,10 +10,11 @@ namespace Piafs
     {
         public override float GetValue()
         {
+			if (ampModulators.Count == 0) return 0f;
             float multipliedAmp = amp;
             foreach (Modulator ampModulator in ampModulators)
             {
-                multipliedAmp *= ampModulator.GetPositiveValue();
+                if(ampModulator != null)multipliedAmp *= ampModulator.GetPositiveValue();
             }
             return multipliedAmp;
         }

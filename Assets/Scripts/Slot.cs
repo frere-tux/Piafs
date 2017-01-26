@@ -23,15 +23,18 @@ namespace Piafs
         {
 			Debug.Log("drop brick");
             slottedBrick = _brick;
+			GetComponent<Collider2D>().enabled = false;
             Modulator dropped = slottedBrick.modulator;
+			if(dropped != null)
+			{
+				dropped.ampModulators.AddRange(ampModulators);
+				dropped.freqModulators.AddRange(freqModulators);
+				dropped.phaseModulators.AddRange(phaseModulators);
 
-            dropped.ampModulators.AddRange(ampModulators);
-            dropped.freqModulators.AddRange(freqModulators);
-            dropped.phaseModulators.AddRange(phaseModulators);
-
-            foreach (Modulator m in ampOutputs) m.ampModulators.Add(dropped);
-            foreach (Modulator m in freqOutputs) m.freqModulators.Add(dropped);
-            foreach (Modulator m in phaseOutputs) m.phaseModulators.Add(dropped);
+				foreach (Modulator m in ampOutputs) m.ampModulators.Add(dropped);
+				foreach (Modulator m in freqOutputs) m.freqModulators.Add(dropped);
+				foreach (Modulator m in phaseOutputs) m.phaseModulators.Add(dropped);
+			}
         }
 
 		public void SetSlottedBrick(Brick _brick)
@@ -41,7 +44,8 @@ namespace Piafs
 
         public void GrabOscillator()
         {
-            if(slottedBrick != null)
+			GetComponent<Collider2D>().enabled = true;
+			if (slottedBrick != null)
             {
                 Modulator dropped = slottedBrick.modulator;
 
