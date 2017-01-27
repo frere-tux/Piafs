@@ -9,7 +9,7 @@ namespace Piafs
         [Header("-- Runtime --")]
         public float sliderValue;
         public FixedModulator fixedModulator;
-        public List<FixedModulator> fixedModulators;
+        public List<FixedModulator> fixedModulators = new List<FixedModulator>();
         [Header("-- Interface --")]
         public GameObject movingPart;
         public float fullDragWorldDistance;

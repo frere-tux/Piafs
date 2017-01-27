@@ -10,7 +10,7 @@ namespace Piafs
     {
         public override float GetValue()
         {
-			if (ampModulators.Count == 0) return 0f;
+            if (ampModulators.Count == 0) return 0f;
             float multipliedAmp = amp;
             foreach (Modulator ampModulator in ampModulators)
             {

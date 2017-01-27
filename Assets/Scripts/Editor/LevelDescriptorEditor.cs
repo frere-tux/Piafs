@@ -13,6 +13,13 @@ namespace Piafs
 			LevelDescriptor levelDescriptor = ((LevelDescriptor)target);
 			Color guiTint = new Color(1f, 1f, 1f);
 			GUI.color = guiTint;
+			if(levelDescriptor.librarySlotPrefab == null || 
+				levelDescriptor.plugSlotPrefab == null || 
+				levelDescriptor.interfaceHolder == null ||
+				levelDescriptor.sliderPrefab == null)
+			{
+				EditorGUILayout.HelpBox("Level design helpers have not been filled.", MessageType.Warning);
+			}
 			if (levelDescriptor.levelManager == null)
 			{
 				EditorGUILayout.HelpBox("No level manager parent was found !", MessageType.Error);

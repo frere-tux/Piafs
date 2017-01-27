@@ -11,9 +11,11 @@ namespace Piafs
         public float songIntervalMin, songIntervalMax;
         public float answerIntervalMin, answerIntervalMax;
         public SequenceElement[] birdSong;
-        [Header("Prefabs for helpers")]
+        [Header("Level design helpers")]
         public GameObject librarySlotPrefab;
 		public GameObject plugSlotPrefab;
+		public GameObject sliderPrefab;
+		public GameObject interfaceHolder;
 
         [HideInInspector]
         public LevelManager levelManager;
